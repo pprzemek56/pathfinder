@@ -3,6 +3,9 @@ class Field:
         self.x = x
         self.y = y
 
+    def __str__(self) -> str:
+        return f"x = {self.x}, y = {self.y}"
+
     @property
     def x(self):
         return self._x
@@ -18,3 +21,7 @@ class Field:
     @y.setter
     def y(self, y):
         self._y = y
+
+
+if __name__ == "__main__":
+    pass
