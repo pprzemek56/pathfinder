@@ -1,8 +1,7 @@
 class Field:
-    def __init__(self, x, y, field_type):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.field_type = field_type
 
     @property
     def x(self):
@@ -19,11 +18,3 @@ class Field:
     @y.setter
     def y(self, y):
         self._y = y
-
-    @property
-    def field_type(self):
-        return self._field_type
-
-    @field_type.setter
-    def field_type(self, field_type):
-        self._field_type = field_type
