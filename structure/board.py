@@ -66,9 +66,25 @@ class Board:
         self._visited = visited
 
     def get_available_neighbors(self, x, y):
-        pass
+        possible_x = [x, x + 1, x, x - 1]
+        possible_y = [y - 1, y, y + 1, y]
+        available_neighbors = []
+
+        for i in range(4):
+            # Check if possible neighbors' field is on the board
+            if possible_x[i] < 0 or possible_x[i] > 56 or possible_y[i] < 0 or possible_y[i] > 20:
+                continue
+
+            possible_neighbor = Field(possible_x[i], possible_y[i])
+            # Check if possible neighbor is not visited or is not a wall field
+            if possible_neighbor not in self.walls and possible_neighbor not in self.visited:
+                available_neighbors.append(possible_neighbor)
+
+        return available_neighbors
 
 
 if __name__ == "__main__":
     board = generate_board()
-    print(board)
+
+    for neighbor in board.get_available_neighbors(10, 9):
+        print(neighbor)
