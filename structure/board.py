@@ -10,15 +10,14 @@ def generate_board():
 
 def init_point(json_point):
     new_field = Field(json_point["x"], json_point["y"])
-    print(new_field)
     return new_field
 
 
 class Board:
     def __init__(self, start, end, walls):
-        self.start = init_point(start),
-        self.end = init_point(end),
-        self.walls = [init_point(wall) for wall in walls],
+        self.start = init_point(start)
+        self.end = init_point(end)
+        self.walls = [init_point(wall) for wall in walls]
         self.visited = []
         self.visited.append(self.start)
 
