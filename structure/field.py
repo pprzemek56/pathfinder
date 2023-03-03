@@ -6,6 +6,11 @@ class Field:
     def __str__(self) -> str:
         return f"x = {self.x}, y = {self.y}"
 
+    def __eq__(self, o: object) -> bool:
+        if isinstance(o, Field):
+            return self.x == o.x and self.y == o.y
+        return False
+
     @property
     def x(self):
         return self._x
