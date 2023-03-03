@@ -30,6 +30,38 @@ class Board:
             message += f"{i + 1}: {field},\n"
         return message
 
+    @property
+    def start(self):
+        return self._start
+
+    @start.setter
+    def start(self, start):
+        self._start = start
+
+    @property
+    def end(self):
+        return self._end
+
+    @end.setter
+    def end(self, end):
+        self._end = end
+
+    @property
+    def walls(self):
+        return self._walls
+
+    @walls.setter
+    def walls(self, walls):
+        self._walls = walls
+
+    @property
+    def visited(self):
+        return self._visited
+
+    @visited.setter
+    def visited(self, visited):
+        self._visited = visited
+
 
 if __name__ == "__main__":
     board = generate_board()
