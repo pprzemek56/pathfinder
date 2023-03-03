@@ -17,15 +17,20 @@ class Board:
     def __init__(self, start, end, walls):
         self.start = init_point(start)
         self.end = init_point(end)
-        self.walls = {"x": [], "y": []}
-        self.visited = {"x": [], "y": []}
+        self.walls = [init_point(wall) for wall in walls]
+        self.visited = []
 
-        self.init_walls_visited(walls)
+        self.visited.append(self.start)
 
     def __str__(self) -> str:
-        message = f"start: {self.start},\nend: {self.end},\n"
-        message += f"walls: {self.walls}\n"
-        message += f"visited fields: {self.visited}\n"
+        message = f"start: {self.start},\n"
+        message += f"end: {self.end},\n"
+        message += f"walls:\n"
+        for i, wall in enumerate(self.walls):
+            message += f"{i + 1}.: {wall}\n"
+        message += f"visited:\n"
+        for i, visit in enumerate(self.visited):
+            message += f"{i + 1}.: {visit}\n"
         return message
 
     @property
@@ -60,16 +65,10 @@ class Board:
     def visited(self, visited):
         self._visited = visited
 
-    def init_walls_visited(self, walls):
-        # init visited fields
-        self.visited["x"].append(self.start.x)
-        self.visited["y"].append(self.start.y)
-
-        # init walls
-        for wall in walls:
-            self.walls["x"].append(wall["x"])
-            self.walls["y"].append(wall["y"])
+    def get_available_neighbors(self, x, y):
+        pass
 
 
 if __name__ == "__main__":
-    pass
+    board = generate_board()
+    print(board)
