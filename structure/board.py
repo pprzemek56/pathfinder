@@ -82,7 +82,8 @@ class Board:
 
         return available_neighbors
 
-    # TODO: create method for adding Field to visited list
+    def add_visited_field(self, field):
+        self.visited.append(field)
 
 
 if __name__ == "__main__":
