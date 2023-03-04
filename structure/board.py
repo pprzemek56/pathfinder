@@ -82,9 +82,8 @@ class Board:
 
         return available_neighbors
 
+    # TODO: create method for adding Field to visited list
+
 
 if __name__ == "__main__":
-    board = generate_board()
-
-    for neighbor in board.get_available_neighbors(10, 9):
-        print(neighbor)
+    pass
