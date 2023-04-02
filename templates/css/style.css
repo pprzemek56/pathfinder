@@ -42,3 +42,9 @@
   background-color: #1f6b9b;
   border: none;
 }
+
+#game_canvas{
+  width: calc(100% - 40px);
+  margin: 20px;
+  border: 1px solid #0e5a8a;
+}
