@@ -43,8 +43,15 @@
   border: none;
 }
 
-#game_canvas{
+.board{
+  display: flex;
   width: calc(100% - 40px);
+  height: 544px;
   margin: 20px;
-  border: 1px solid #0e5a8a;
+  justify-content: center;
+  align-items: center;
+}
+
+#game_canvas{
+
 }
