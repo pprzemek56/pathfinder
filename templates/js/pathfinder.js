@@ -18,6 +18,8 @@ const a_square = 24;
 //3 = end square
 let board = initBoard();
 let prevSquare = null;
+let start = {x: 10, y: 10}
+let end = {x: 41, y: 10}
 
 function move_mouse(event) {
     let x = event.clientX - canvas.offsetLeft;
@@ -74,6 +76,39 @@ function drawRectangle(x, y, color) {
     ctx.strokeRect(x * 24, y * 24, 24, 24);
 }
 
+function drawStart(x, y){
+    // Set up the drawing style
+    ctx.fillStyle = "#1e9403";
+    ctx.strokeStyle = "#1e9403";
+
+    // Calculate the size and position of the triangle
+    let triangleSize = a_square * 0.33;
+    let triangleX = x * a_square + (a_square / 3);
+    let triangleY = y * a_square + (a_square / 2);
+
+    // Draw the triangle
+    ctx.beginPath();
+    ctx.moveTo(triangleX, triangleY - triangleSize);
+    ctx.lineTo(triangleX + triangleSize, triangleY);
+    ctx.lineTo(triangleX, triangleY + triangleSize);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+}
+
+function drawEnd(x, y){
+    const radius = 9;
+    const innerRadius = 4;
+    ctx.beginPath();
+    ctx.arc(x*24+12, y*24+12, radius, 0, 2*Math.PI, false);
+    ctx.strokeStyle = "#780202";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(x*24+12, y*24+12, innerRadius, 0, 2*Math.PI, false);
+    ctx.fillStyle = "#780202";
+    ctx.fill();
+}
 
 function initBoard() {
 
@@ -107,6 +142,8 @@ function drawBoard() {
         ctx.stroke();
     }
 
+    drawStart(start.x, start.y);
+    drawEnd(end.x, end.y);
 }
 
 window.addEventListener('load', function (){
