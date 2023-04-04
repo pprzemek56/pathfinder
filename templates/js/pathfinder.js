@@ -1,9 +1,11 @@
 const canvas = document.getElementById("game_canvas");
 const ctx = canvas.getContext("2d");
 
-canvas.addEventListener('click', click_board);
-canvas.addEventListener('mousedown', move_mouse);
-canvas.addEventListener('mousemove', move_mouse);
+canvas.addEventListener('mousemove', drawingElements);
+canvas.addEventListener('mousedown', drawingElements);
+canvas.addEventListener('mouseup', function (event){
+    clickedSquare = null;
+})
 
 const HORIZONTAL_SQUARES = 53;
 const VERTICAL_SQUARES = 21;
@@ -17,56 +19,71 @@ const a_square = 24;
 //2 = start square
 //3 = end square
 let board = initBoard();
-let prevSquare = null;
 let start = {x: 10, y: 10}
 let end = {x: 41, y: 10}
+let previousSquare = null;
+let clickedSquare = null;
 
-function move_mouse(event) {
-    let x = event.clientX - canvas.offsetLeft;
+function drawingElements(event) {
+let x = event.clientX - canvas.offsetLeft;
     let y = event.clientY - canvas.offsetTop;
 
     if (x > 0 && x < 1272 && y > 0 && y < 504) {
-        x = Math.floor(x / 24)
-        y = Math.floor(y / 24)
+        x = Math.floor(x / 24);
+        y = Math.floor(y / 24);
     }
-    if (event.buttons === 1) {
-        if (prevSquare !== null && (prevSquare.x !== x || prevSquare.y !== y)) {
-            if (board[prevSquare.y][prevSquare.x] === 0) {
-                drawRectangle(prevSquare.x, prevSquare.y, "white");
-            } else if (board[prevSquare.y][prevSquare.x] === 1) {
-                drawRectangle(prevSquare.x, prevSquare.y, "#0f3052");
+
+    if (event.type === "mousedown"){
+        clickedSquare = board[y][x];
+        if (clickedSquare === 2 || clickedSquare === 3) {
+            // move the start/end sign
+            previousSquare = {x: x, y: y};
+        } else {
+            // place/remove walls
+            if (board[y][x] === 0){
+                // place walls
+                drawRectangle(x, y, "#0f3052");
+                board[y][x] = 1;
+            }else if(board[y][x] === 1){
+                // remove walls
+                drawRectangle(x, y, "#ffffff");
+                board[y][x] = 0;
             }
+            previousSquare = {x: x, y: y};
         }
-
-        if (board[y][x] === 0 && (prevSquare === null || prevSquare.x !== x || prevSquare.y !== y)) {
-            board[y][x] = 1;
+    } else if (event.type === "mousemove" && event.buttons === 1) {
+        if (clickedSquare === 2) {
+            // move the start sign
+            if (board[y][x] !== 3){
+                drawRectangle(previousSquare.x, previousSquare.y, "#ffffff");
+                drawStart(x, y);
+                board[previousSquare.y][previousSquare.x] = 0;
+                board[y][x] = 2;
+                start = {x: x, y: y};
+            }
+            previousSquare = {x: x, y: y};
+        } else if (clickedSquare === 3) {
+            // move the end sign
+            if (board[y][x] !== 2){
+                drawRectangle(previousSquare.x, previousSquare.y, "#ffffff");
+                drawEnd(x, y);
+                board[previousSquare.y][previousSquare.x] = 0;
+                board[y][x] = 3;
+                end = {x: x, y: y};
+            }
+            previousSquare = {x: x, y: y};
+        } else if (board[y][x] === 0 && (previousSquare.x !== x || previousSquare.y !== y) && clickedSquare === 0){
+            // place walls
             drawRectangle(x, y, "#0f3052");
-        }
-        else if (board[y][x] === 1 && (prevSquare === null || prevSquare.x !== x || prevSquare.y !== y)) {
+            board[y][x] = 1;
+        }else if(board[y][x] === 1 && (previousSquare.x !== x || previousSquare.y !== y) && clickedSquare === 1){
+            // remove walls
+            drawRectangle(x, y, "#ffffff");
             board[y][x] = 0;
-            drawRectangle(x, y, "white");
         }
-        prevSquare = {x: x, y: y};
-    }
-}
-
-
-function click_board(event) {
-    let x = event.clientX - canvas.offsetLeft;
-    let y = event.clientY - canvas.offsetTop;
-
-    if (x > 0 && x < 1272 && y > 0 && y < 504) {
-        x = Math.floor(x / 24)
-        y = Math.floor(y / 24)
+        previousSquare = {x: x, y: y};
     }
 
-    if (board[y][x] === 0){
-        board[y][x] = 1;
-        drawRectangle(x, y, "#0f3052");
-    }else if (board[y][x] === 1){
-        board[y][x] = 0;
-        drawRectangle(x, y, "white");
-    }
 }
 
 function drawRectangle(x, y, color) {
@@ -78,8 +95,8 @@ function drawRectangle(x, y, color) {
 
 function drawStart(x, y){
     // Set up the drawing style
-    ctx.fillStyle = "#1e9403";
-    ctx.strokeStyle = "#1e9403";
+    ctx.fillStyle = "#0f3052";
+    ctx.strokeStyle = "#0f3052";
 
     // Calculate the size and position of the triangle
     let triangleSize = a_square * 0.33;
@@ -101,12 +118,12 @@ function drawEnd(x, y){
     const innerRadius = 4;
     ctx.beginPath();
     ctx.arc(x*24+12, y*24+12, radius, 0, 2*Math.PI, false);
-    ctx.strokeStyle = "#780202";
+    ctx.strokeStyle = "#0f3052";
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(x*24+12, y*24+12, innerRadius, 0, 2*Math.PI, false);
-    ctx.fillStyle = "#780202";
+    ctx.fillStyle = "#0f3052";
     ctx.fill();
 }
 
@@ -125,7 +142,7 @@ function initBoard() {
 
 function drawBoard() {
     ctx.strokeStyle = "#0f3052"
-    ctx.lineWidth = 1;
+
     //Draw horizontal lines
     for(let i = 0; i < VERTICAL_SQUARES + 1; i++){
         ctx.beginPath();
