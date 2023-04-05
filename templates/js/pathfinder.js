@@ -57,8 +57,10 @@ function drawingElements(event) {
                 board[previousSquare.y][previousSquare.x] = 0;
                 board[y][x] = 2;
                 start = {x: x, y: y};
+            } else{
+                // switch the focus to the end sign
+                clickedSquare = 3;
             }
-            previousSquare = {x: x, y: y};
         } else if (clickedSquare === 3) {
             // move the end sign
             if (board[y][x] !== 2){
@@ -67,9 +69,11 @@ function drawingElements(event) {
                 board[previousSquare.y][previousSquare.x] = 0;
                 board[y][x] = 3;
                 end = {x: x, y: y};
+            } else {
+                // switch the focus to the start sign
+                clickedSquare = 2;
             }
-            previousSquare = {x: x, y: y};
-        } else if (board[y][x] === 0 && (previousSquare.x !== x || previousSquare.y !== y) && clickedSquare === 0){
+        }else if (board[y][x] === 0 && (previousSquare.x !== x || previousSquare.y !== y) && clickedSquare === 0){
             // place walls
             drawRectangle(x, y, "#0f3052");
             board[y][x] = 1;
