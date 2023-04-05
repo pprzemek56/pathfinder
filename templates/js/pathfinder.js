@@ -3,9 +3,6 @@ const ctx = canvas.getContext("2d");
 
 canvas.addEventListener('mousemove', drawingElements);
 canvas.addEventListener('mousedown', drawingElements);
-canvas.addEventListener('mouseup', function (event){
-    clickedSquare = null;
-})
 
 const HORIZONTAL_SQUARES = 53;
 const VERTICAL_SQUARES = 21;
@@ -25,7 +22,7 @@ let previousSquare = null;
 let clickedSquare = null;
 
 function drawingElements(event) {
-let x = event.clientX - canvas.offsetLeft;
+    let x = event.clientX - canvas.offsetLeft;
     let y = event.clientY - canvas.offsetTop;
 
     if (x > 0 && x < 1272 && y > 0 && y < 504) {
@@ -82,6 +79,8 @@ let x = event.clientX - canvas.offsetLeft;
             board[y][x] = 0;
         }
         previousSquare = {x: x, y: y};
+    } else if(event.type === "mousemove"){
+        clickedSquare = null;
     }
 
 }
