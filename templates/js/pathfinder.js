@@ -173,14 +173,16 @@ window.addEventListener('load', function (){
 });
 
 document.getElementById('dfs').addEventListener('click', selectAlgorithm);
+document.getElementById('bfs').addEventListener('click', selectAlgorithm);
+document.getElementById('dijkstra').addEventListener('click', selectAlgorithm);
 document.getElementById("start_btn").addEventListener('click', startVisualization);
 
-let selectedAlgorithm = null
+let algorithm = null
 
 function selectAlgorithm(event){
     event.preventDefault();
 
-    selectedAlgorithm = event.target.id;
+    algorithm = event.target.id;
 }
 
 async function startVisualization(){
@@ -189,6 +191,6 @@ async function startVisualization(){
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({board, selectedAlgorithm})
+        body: JSON.stringify({board, algorithm})
     });
 }

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from webapp.pathfinder.models import Board
+from pathfinder.models import Board
 
 
 class BoardSerializer(serializers.Serializer):

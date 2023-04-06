@@ -3,6 +3,9 @@ class Board:
         self.board = board
         self.algorithm = algorithm
 
+    def __str__(self):
+        return f"algorithm: {self.algorithm}"
+
     @property
     def board(self):
         return self._board
