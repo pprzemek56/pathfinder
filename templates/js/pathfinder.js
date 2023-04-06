@@ -184,7 +184,7 @@ function selectAlgorithm(event){
 }
 
 async function startVisualization(){
-    const response = await fetch('http://localhost:8080/visualize', {
+    const response = await fetch('http://localhost:8000/visualize/', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
