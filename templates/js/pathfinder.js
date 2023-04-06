@@ -171,3 +171,24 @@ window.addEventListener('load', function (){
     drawBoard();
 
 });
+
+document.getElementById('dfs').addEventListener('click', selectAlgorithm);
+document.getElementById("start_btn").addEventListener('click', startVisualization);
+
+let selectedAlgorithm = null
+
+function selectAlgorithm(event){
+    event.preventDefault();
+
+    selectedAlgorithm = event.target.id;
+}
+
+async function startVisualization(){
+    const response = await fetch('http://localhost:8080/visualize', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({board, selectedAlgorithm})
+    });
+}
