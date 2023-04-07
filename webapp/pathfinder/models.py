@@ -36,5 +36,27 @@ class Board:
                     return start, end
 
 
+class Path:
+    def __init__(self, visited, path):
+        self.visited = visited
+        self.path = path
+
+    @property
+    def visited(self):
+        return self._visited
+
+    @visited.setter
+    def visited(self, visited):
+        self._visited = visited
+
+    @property
+    def path(self):
+        return self._path
+
+    @path.setter
+    def path(self, path):
+        self._path = path
+
+
 if __name__ == "__main__":
     pass
