@@ -22,7 +22,19 @@ class Board:
     def algorithm(self, algorithm):
         self._algorithm = algorithm
 
+    def find_start_end(self):
+        start = None
+        end = None
+        for i in range(len(self.board)):
+            for j in range(len(self.board[i])):
+                if self.board[i][j] == 2:
+                    start = {"x": j, "y": i}
+                elif self.board[i][j] == 3:
+                    end = {"x": j, "y": i}
+
+                if start and end:
+                    return start, end
+
 
 if __name__ == "__main__":
     pass
-
