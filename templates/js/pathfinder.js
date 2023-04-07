@@ -193,4 +193,16 @@ async function startVisualization(){
         },
         body: JSON.stringify({board, algorithm})
     });
+
+    if (response.ok){
+        const result = await response.json();
+
+        animateAlgorithm(result);
+    }else{
+        console.error("Error fetching data from the server: ", response.statusText);
+    }
+}
+
+function animateAlgorithm(result){
+    console.log("Here will be the visualization of the path algorithm");
 }

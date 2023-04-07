@@ -24,7 +24,10 @@ def visualize(request: Request):
         shortest_path = visited
 
     path = Path(visited, shortest_path)
-    path_serializer = PathSerializer(path)
-    path_serializer.is_valid(raise_exception=True)
+    path_serializer = PathSerializer(data=path)
+    if path_serializer.is_valid():
+        response = Response(data=path_serializer.data)
+    else:
+        return Response(data=path_serializer.errors)
 
-    return Response(data=path_serializer.data)
+    return response
