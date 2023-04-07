@@ -2,7 +2,9 @@ from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from pathfinder.serializers import BoardSerializer
+from . import algorithms
+from .models import Path
+from .serializers import BoardSerializer, PathSerializer
 
 
 @api_view(["POST"])
@@ -14,7 +16,15 @@ def visualize(request: Request):
     else:
         return Response(data=board_serializer.errors)
 
+    visited = []
+    shortest_path = []
 
+    if board.algorithm == "dfs":
+        visited = algorithms.dfs_algorithm(board)
+        shortest_path = visited
 
+    path = Path(visited, shortest_path)
+    path_serializer = PathSerializer(path)
+    path_serializer.is_valid(raise_exception=True)
 
-    return Response()
+    return Response(data=path_serializer.data)

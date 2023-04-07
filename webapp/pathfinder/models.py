@@ -37,9 +37,9 @@ class Board:
 
 
 class Path:
-    def __init__(self, visited, path):
+    def __init__(self, visited, shortest_path):
         self.visited = visited
-        self.path = path
+        self.shortest_path = shortest_path
 
     @property
     def visited(self):
@@ -50,12 +50,12 @@ class Path:
         self._visited = visited
 
     @property
-    def path(self):
-        return self._path
+    def shortest_path(self):
+        return self._shortest_path
 
-    @path.setter
-    def path(self, path):
-        self._path = path
+    @shortest_path.setter
+    def shortest_path(self, shortest_path):
+        self._shortest_path = shortest_path
 
 
 if __name__ == "__main__":

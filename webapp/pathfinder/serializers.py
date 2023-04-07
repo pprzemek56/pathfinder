@@ -1,6 +1,20 @@
 from rest_framework import serializers
 
 from pathfinder.models import Board
+from pathfinder.models import Path
+
+
+class PathSerializer(serializers.Serializer):
+    visited = serializers.ListField()
+    path = serializers.ListField()
+
+    def create(self, validated_data):
+        return Path(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.visited = validated_data.get("visited")
+        instance.path = validated_data.get("path")
+        return instance
 
 
 class BoardSerializer(serializers.Serializer):
