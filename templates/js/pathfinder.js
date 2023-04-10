@@ -145,7 +145,8 @@ function initBoard() {
 
 function drawBoard() {
     ctx.strokeStyle = "#0f3052"
-
+    ctx.lineWidth = 2;
+    
     //Draw horizontal lines
     for(let i = 0; i < VERTICAL_SQUARES + 1; i++){
         ctx.beginPath();
@@ -197,12 +198,20 @@ async function startVisualization(){
     if (response.ok){
         const result = await response.json();
 
-        animateAlgorithm(result);
+        let visited = result["visited"];
+        let shortestPath = result["shortest_path"];
+        if(visited === null && shortestPath === null){
+            console.log("Path not exist");
+            // TODO
+        }
+
+        animateAlgorithm(visited, shortestPath);
     }else{
         console.error("Error fetching data from the server: ", response.statusText);
     }
 }
 
-function animateAlgorithm(result){
-    console.log("Here will be the visualization of the path algorithm");
+function animateAlgorithm(visited, shortestPath){
+    console.log(visited);
+    console.log(shortestPath);
 }
