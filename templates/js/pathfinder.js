@@ -146,7 +146,7 @@ function initBoard() {
 function drawBoard() {
     ctx.strokeStyle = "#0f3052"
     ctx.lineWidth = 2;
-    
+
     //Draw horizontal lines
     for(let i = 0; i < VERTICAL_SQUARES + 1; i++){
         ctx.beginPath();
@@ -179,6 +179,10 @@ document.getElementById('dijkstra').addEventListener('click', selectAlgorithm);
 document.getElementById("start_btn").addEventListener('click', startVisualization);
 
 let algorithm = null
+//50 - fast
+//300 - medium
+//600 - slow
+const duration = 600;
 
 function selectAlgorithm(event){
     event.preventDefault();
@@ -205,13 +209,52 @@ async function startVisualization(){
             // TODO
         }
 
-        animateAlgorithm(visited, shortestPath);
+        await animateAlgorithm(visited, shortestPath);
     }else{
         console.error("Error fetching data from the server: ", response.statusText);
     }
 }
 
-function animateAlgorithm(visited, shortestPath){
-    console.log(visited);
-    console.log(shortestPath);
+async function animateAlgorithm(visited, shortestPath) {
+    const animationDuration = 10;
+
+    async function animateSquare(x, y, color, startSize, endSize, duration) {
+        const steps = Math.ceil(duration / animationDuration);
+        const deltaSize = (endSize - startSize) / steps;
+
+        for (let i = 0; i <= steps; i++) {
+            let size = startSize + deltaSize * i;
+
+            ctx.fillStyle = color;
+            ctx.fillRect(x * a_square + (a_square - size) / 2, y * a_square + (a_square - size) / 2, size, size);
+            ctx.strokeStyle = "#0f3052";
+            ctx.strokeRect(x * a_square, y * a_square, a_square, a_square);
+
+            await new Promise(resolve => setTimeout(resolve, animationDuration));
+        }
+    }
+
+    // Animate visited squares
+    for (const square of visited) {
+        const {x, y} = square;
+        await animateSquare(x, y, "yellow", 0, a_square, duration / 4);
+        drawRectangle(x, y, "#ffffff");
+        await animateSquare(x, y, "skyblue", 0, a_square, duration);
+        if (board[y][x] === 2){
+            drawStart(x, y);
+        } else if(board[y][x] === 3){
+            drawEnd(x, y);
+        }
+    }
+
+    // Animate the shortest path squares
+    for (const square of shortestPath) {
+        const {x, y} = square;
+        await animateSquare(x, y, "#86c232", 0, a_square, duration);
+        if (board[y][x] === 2){
+            drawStart(x, y);
+        } else if(board[y][x] === 3){
+            drawEnd(x, y);
+        }
+    }
 }
