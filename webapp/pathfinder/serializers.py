@@ -5,15 +5,15 @@ from pathfinder.models import Path
 
 
 class PathSerializer(serializers.Serializer):
-    visited = serializers.ListField()
-    path = serializers.ListField()
+    visited = serializers.ListField(child=serializers.DictField())
+    shortest_path = serializers.ListField(child=serializers.DictField())
 
     def create(self, validated_data):
         return Path(**validated_data)
 
     def update(self, instance, validated_data):
         instance.visited = validated_data.get("visited")
-        instance.path = validated_data.get("path")
+        instance.shortest_path = validated_data.get("shortest_path")
         return instance
 
 

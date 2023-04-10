@@ -20,11 +20,9 @@ def visualize(request: Request):
     shortest_path = []
 
     if board.algorithm == "dfs":
-        visited = algorithms.dfs_algorithm(board)
-        shortest_path = visited
+        visited, shortest_path = algorithms.dfs_algorithm(board)
 
-    path = Path(visited, shortest_path)
-    path_serializer = PathSerializer(data=path)
+    path_serializer = PathSerializer(data={"visited": visited, "shortest_path": shortest_path})
     if path_serializer.is_valid():
         response = Response(data=path_serializer.data)
     else:

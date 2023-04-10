@@ -11,7 +11,7 @@ def dfs_algorithm(board: Board):
         visited.append(node)
 
         if node == end:
-            return visited
+            return visited, visited
 
         x, y = node.get("x"), node.get("y")
 
@@ -20,8 +20,8 @@ def dfs_algorithm(board: Board):
             nx, ny = x + dx, y + dy
             if 0 <= nx < len(board.board)\
                     and 0 <= ny < len(board.board[0]) \
-                    and board.board[nx][ny] == 0 \
+                    and (board.board[nx][ny] == 0 or board.board[nx][ny] == 3) \
                     and {"x": nx, "y": ny} not in visited:
                 stack.append({"x": nx, "y": ny})
 
-    return f"The path doesn't exist!"
+    return None, None
