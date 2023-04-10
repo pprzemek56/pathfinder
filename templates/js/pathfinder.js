@@ -177,12 +177,19 @@ document.getElementById('dfs').addEventListener('click', selectAlgorithm);
 document.getElementById('bfs').addEventListener('click', selectAlgorithm);
 document.getElementById('dijkstra').addEventListener('click', selectAlgorithm);
 document.getElementById("start_btn").addEventListener('click', startVisualization);
+document.getElementById('fast').addEventListener('click', initSpeed);
+document.getElementById('medium').addEventListener('click', initSpeed);
+document.getElementById('slow').addEventListener('click', initSpeed);
 
 let algorithm = null
-//50 - fast
-//300 - medium
-//600 - slow
-const duration = 600;
+let duration = null;
+
+function initSpeed(event){
+    let speed = event.target.id;
+    if (speed === "fast") duration = 50;
+    else if(speed === "medium") duration = 300;
+    else duration = 600;
+}
 
 function selectAlgorithm(event){
     event.preventDefault();
@@ -257,4 +264,18 @@ async function animateAlgorithm(visited, shortestPath) {
             drawEnd(x, y);
         }
     }
+}
+
+
+document.getElementById("clear_board").addEventListener("click", clearBoard);
+
+function clearBoard() {
+    // Initialize the board with empty squares
+    board = initBoard();
+
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Redraw the empty board
+    drawBoard();
 }
