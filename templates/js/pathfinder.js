@@ -6,8 +6,8 @@ canvas.addEventListener('mousedown', drawingElements);
 
 const HORIZONTAL_SQUARES = 53;
 const VERTICAL_SQUARES = 21;
-const BOARD_WIDTH = 1272;
-const BOARD_HEIGHT = 504;
+// const BOARD_WIDTH = 1272;
+// const BOARD_HEIGHT = 504;
 
 const a_square = 24;
 
@@ -20,72 +20,76 @@ let start = {x: 10, y: 10}
 let end = {x: 41, y: 10}
 let previousSquare = null;
 let clickedSquare = null;
+let isAnimating = false;
 
 function drawingElements(event) {
-    let x = event.clientX - canvas.offsetLeft;
-    let y = event.clientY - canvas.offsetTop;
+    if(isAnimating === false){
+        let x = event.clientX - canvas.offsetLeft;
+        let y = event.clientY - canvas.offsetTop;
 
-    if (x > 0 && x < 1272 && y > 0 && y < 504) {
-        x = Math.floor(x / 24);
-        y = Math.floor(y / 24);
-    }
+        if (x > 0 && x < 1272 && y > 0 && y < 504) {
+            x = Math.floor(x / 24);
+            y = Math.floor(y / 24);
+        }
 
-    if (event.type === "mousedown"){
-        clickedSquare = board[y][x];
-        if (clickedSquare === 2 || clickedSquare === 3) {
-            // move the start/end sign
-            previousSquare = {x: x, y: y};
-        } else {
-            // place/remove walls
-            if (board[y][x] === 0){
+        if (event.type === "mousedown"){
+            clickedSquare = board[y][x];
+            if (clickedSquare === 2 || clickedSquare === 3) {
+                // move the start/end sign
+                previousSquare = {x: x, y: y};
+            } else {
+                // place/remove walls
+                if (board[y][x] === 0){
+                    // place walls
+                    drawRectangle(x, y, "#0f3052");
+                    board[y][x] = 1;
+                }else if(board[y][x] === 1){
+                    // remove walls
+                    drawRectangle(x, y, "#ffffff");
+                    board[y][x] = 0;
+                }
+                previousSquare = {x: x, y: y};
+            }
+        } else if (event.type === "mousemove" && event.buttons === 1) {
+            if (clickedSquare === 2) {
+                // move the start sign
+                if (board[y][x] !== 3){
+                    drawRectangle(previousSquare.x, previousSquare.y, "#ffffff");
+                    drawStart(x, y);
+                    board[previousSquare.y][previousSquare.x] = 0;
+                    board[y][x] = 2;
+                    start = {x: x, y: y};
+                } else{
+                    // switch the focus to the end sign
+                    clickedSquare = 3;
+                }
+            } else if (clickedSquare === 3) {
+                // move the end sign
+                if (board[y][x] !== 2){
+                    drawRectangle(previousSquare.x, previousSquare.y, "#ffffff");
+                    drawEnd(x, y);
+                    board[previousSquare.y][previousSquare.x] = 0;
+                    board[y][x] = 3;
+                    end = {x: x, y: y};
+                } else {
+                    // switch the focus to the start sign
+                    clickedSquare = 2;
+                }
+            }else if (board[y][x] === 0 && (previousSquare.x !== x || previousSquare.y !== y) && clickedSquare === 0){
                 // place walls
                 drawRectangle(x, y, "#0f3052");
                 board[y][x] = 1;
-            }else if(board[y][x] === 1){
+            }else if(board[y][x] === 1 && (previousSquare.x !== x || previousSquare.y !== y) && clickedSquare === 1){
                 // remove walls
                 drawRectangle(x, y, "#ffffff");
                 board[y][x] = 0;
             }
             previousSquare = {x: x, y: y};
+        } else if(event.type === "mousemove"){
+            clickedSquare = null;
         }
-    } else if (event.type === "mousemove" && event.buttons === 1) {
-        if (clickedSquare === 2) {
-            // move the start sign
-            if (board[y][x] !== 3){
-                drawRectangle(previousSquare.x, previousSquare.y, "#ffffff");
-                drawStart(x, y);
-                board[previousSquare.y][previousSquare.x] = 0;
-                board[y][x] = 2;
-                start = {x: x, y: y};
-            } else{
-                // switch the focus to the end sign
-                clickedSquare = 3;
-            }
-        } else if (clickedSquare === 3) {
-            // move the end sign
-            if (board[y][x] !== 2){
-                drawRectangle(previousSquare.x, previousSquare.y, "#ffffff");
-                drawEnd(x, y);
-                board[previousSquare.y][previousSquare.x] = 0;
-                board[y][x] = 3;
-                end = {x: x, y: y};
-            } else {
-                // switch the focus to the start sign
-                clickedSquare = 2;
-            }
-        }else if (board[y][x] === 0 && (previousSquare.x !== x || previousSquare.y !== y) && clickedSquare === 0){
-            // place walls
-            drawRectangle(x, y, "#0f3052");
-            board[y][x] = 1;
-        }else if(board[y][x] === 1 && (previousSquare.x !== x || previousSquare.y !== y) && clickedSquare === 1){
-            // remove walls
-            drawRectangle(x, y, "#ffffff");
-            board[y][x] = 0;
-        }
-        previousSquare = {x: x, y: y};
-    } else if(event.type === "mousemove"){
-        clickedSquare = null;
     }
+
 
 }
 
@@ -173,10 +177,12 @@ window.addEventListener('load', function (){
 
 });
 
+let startBtn = document.getElementById("start_btn");
+startBtn.addEventListener('click', startVisualization);
+
 document.getElementById('dfs').addEventListener('click', selectAlgorithm);
 document.getElementById('bfs').addEventListener('click', selectAlgorithm);
 document.getElementById('dijkstra').addEventListener('click', selectAlgorithm);
-document.getElementById("start_btn").addEventListener('click', startVisualization);
 document.getElementById('fast').addEventListener('click', initSpeed);
 document.getElementById('medium').addEventListener('click', initSpeed);
 document.getElementById('slow').addEventListener('click', initSpeed);
@@ -198,31 +204,42 @@ function selectAlgorithm(event){
 }
 
 async function startVisualization(){
-    const response = await fetch('http://localhost:8000/visualize/', {
+    if(isAnimating){
+        startBtn.innerText = "Start Visualization!";
+        startBtn.style.backgroundColor = "#0e5a8a";
+        isAnimating = false;
+    }else{
+        const response = await fetch('http://localhost:8000/visualize/', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({board, algorithm})
-    });
+        });
 
-    if (response.ok){
-        const result = await response.json();
+        if (response.ok){
+            const result = await response.json();
 
-        let visited = result["visited"];
-        let shortestPath = result["shortest_path"];
-        if(visited === null && shortestPath === null){
-            console.log("Path not exist");
-            // TODO
+            let visited = result["visited"];
+            let shortestPath = result["shortest_path"];
+            if(visited === null && shortestPath === null){
+                console.log("Path not exist");
+                // TODO
+            }
+
+            await animateAlgorithm(visited, shortestPath);
+        }else{
+            console.error("Error fetching data from the server: ", response.statusText);
         }
-
-        await animateAlgorithm(visited, shortestPath);
-    }else{
-        console.error("Error fetching data from the server: ", response.statusText);
     }
 }
 
 async function animateAlgorithm(visited, shortestPath) {
+    //Change the button to "stop animation"
+    startBtn.innerText = "Stop Visualization!";
+    startBtn.style.backgroundColor = "#8B0000";
+    startBtn.style.boxShadow = "none";
+    isAnimating = true;
     const animationDuration = 10;
 
     async function animateSquare(x, y, color, startSize, endSize, duration) {
@@ -230,6 +247,9 @@ async function animateAlgorithm(visited, shortestPath) {
         const deltaSize = (endSize - startSize) / steps;
 
         for (let i = 0; i <= steps; i++) {
+            if (isAnimating === false){
+                break;
+            }
             let size = startSize + deltaSize * i;
 
             ctx.fillStyle = color;
@@ -270,12 +290,14 @@ async function animateAlgorithm(visited, shortestPath) {
 document.getElementById("clear_board").addEventListener("click", clearBoard);
 
 function clearBoard() {
-    // Initialize the board with empty squares
-    board = initBoard();
+    if (isAnimating === false){
+        // Initialize the board with empty squares
+        board = initBoard();
 
-    // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Redraw the empty board
-    drawBoard();
+        // Redraw the empty board
+        drawBoard();
+    }
 }
