@@ -149,7 +149,7 @@ function initBoard() {
 
 function drawBoard(b = null) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     ctx.strokeStyle = "#0f3052"
     ctx.lineWidth = 2;
 
@@ -192,7 +192,7 @@ startBtn.addEventListener('click', startVisualization);
 
 document.getElementById('dfs').addEventListener('click', selectAlgorithm);
 document.getElementById('bfs').addEventListener('click', selectAlgorithm);
-document.getElementById('dijkstra').addEventListener('click', selectAlgorithm);
+// document.getElementById('dijkstra').addEventListener('click', selectAlgorithm);
 document.getElementById('fast').addEventListener('click', initSpeed);
 document.getElementById('medium').addEventListener('click', initSpeed);
 document.getElementById('slow').addEventListener('click', initSpeed);
