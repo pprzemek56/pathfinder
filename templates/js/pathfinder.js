@@ -186,9 +186,9 @@ let duration = 600;
 
 function initSpeed(event){
     let speed = event.target.id;
-    if (speed === "fast") duration = 50;
-    else if(speed === "medium") duration = 300;
-    else duration = 600;
+    if (speed === "fast") duration = 10;
+    else if(speed === "medium") duration = 50;
+    else duration = 300;
 }
 
 function selectAlgorithm(event){

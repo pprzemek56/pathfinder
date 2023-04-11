@@ -3,7 +3,6 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from . import algorithms
-from .models import Path
 from .serializers import BoardSerializer, PathSerializer
 
 
@@ -21,6 +20,8 @@ def visualize(request: Request):
 
     if board.algorithm == "dfs":
         visited, shortest_path = algorithms.dfs_algorithm(board)
+    elif board.algorithm == "bfs":
+        visited, shortest_path = algorithms.bfs_algorithm(board)
 
     path_serializer = PathSerializer(data={"visited": visited, "shortest_path": shortest_path})
     if path_serializer.is_valid():
