@@ -182,7 +182,7 @@ document.getElementById('medium').addEventListener('click', initSpeed);
 document.getElementById('slow').addEventListener('click', initSpeed);
 
 let algorithm = null
-let duration = null;
+let duration = 600;
 
 function initSpeed(event){
     let speed = event.target.id;
