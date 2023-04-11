@@ -15,9 +15,9 @@ const a_square = 24;
 //1 = wall square
 //2 = start square
 //3 = end square
-let board = initBoard();
 let start = {x: 10, y: 10}
 let end = {x: 41, y: 10}
+let board = initBoard();
 let previousSquare = null;
 let clickedSquare = null;
 let isAnimating = false;
@@ -141,13 +141,15 @@ function initBoard() {
         array[i] = new Array(HORIZONTAL_SQUARES).fill(0);
     }
 
-    array[10][10] = 2;
-    array[10][41] = 3;
+    array[start.y][start.x] = 2;
+    array[end.y][end.x] = 3;
     return array
 }
 
 
-function drawBoard() {
+function drawBoard(b = null) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
     ctx.strokeStyle = "#0f3052"
     ctx.lineWidth = 2;
 
@@ -169,12 +171,20 @@ function drawBoard() {
 
     drawStart(start.x, start.y);
     drawEnd(end.x, end.y);
+
+    if(b !== null){
+        for (let i = 0; i < 21; i++){
+            for (let j = 0; j < 53; j++){
+                if (b[i][j] === 1){
+                    drawRectangle(j, i, "#0f3052");
+                }
+            }
+        }
+    }
 }
 
 window.addEventListener('load', function (){
-
     drawBoard();
-
 });
 
 let startBtn = document.getElementById("start_btn");
@@ -209,6 +219,7 @@ async function startVisualization(){
         startBtn.style.backgroundColor = "#0e5a8a";
         isAnimating = false;
     }else{
+        drawBoard(board);
         const response = await fetch('http://localhost:8000/visualize/', {
         method: "POST",
         headers: {
@@ -222,11 +233,10 @@ async function startVisualization(){
 
             let visited = result["visited"];
             let shortestPath = result["shortest_path"];
-            if(visited === null && shortestPath === null){
+            if(visited === null && shortestPath === null) {
                 console.log("Path not exist");
                 // TODO
             }
-
             await animateAlgorithm(visited, shortestPath);
         }else{
             console.error("Error fetching data from the server: ", response.statusText);
@@ -260,7 +270,6 @@ async function animateAlgorithm(visited, shortestPath) {
             await new Promise(resolve => setTimeout(resolve, animationDuration));
         }
     }
-
     // Animate visited squares
     for (const square of visited) {
         const {x, y} = square;
@@ -284,6 +293,9 @@ async function animateAlgorithm(visited, shortestPath) {
             drawEnd(x, y);
         }
     }
+    startBtn.innerText = "Start Visualization!";
+    startBtn.style.backgroundColor = "#0e5a8a";
+    isAnimating = false;
 }
 
 
