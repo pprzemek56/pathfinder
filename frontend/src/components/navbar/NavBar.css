@@ -1,9 +1,9 @@
-.navbar{
-  background-color: #2596be !important;
+.navbar.navbar-expand-lg.navbar-light.bg-light {
+    background-color: #2596be !important;
 }
 
  .navbar-nav .nav-link {
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 .navbar-brand {
