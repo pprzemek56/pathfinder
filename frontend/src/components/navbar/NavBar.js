@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 import './NavBar.css';
 import Dropdown from "./Dropdown";
+import NavButton from "./NavButton";
 
 function NavBar() {
     const [selectedSpeed, setSelectedSpeed] = useState(null);
@@ -43,11 +44,7 @@ function NavBar() {
                             selectedItem={selectedAlgorithm}
                             onSelectItem={setSelectedAlgorithm}
                         />
-                        <li className="nav-item">
-                            <button type="button" className="btn btn-primary btn-lg" id="start_btn">Start
-                                Visualization!
-                            </button>
-                        </li>
+                        <NavButton id="start_btn" label="Start Visualization!" />
                         <li className="nav-item">
                             <a className="nav-link" id="clear_board">Clear Board</a>
                         </li>
