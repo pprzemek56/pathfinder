@@ -1,6 +1,14 @@
 .nav-link {
-    color: #ffffff !important; /* The default Bootstrap link color, but you can set this to whatever you want. */
+    color: #ffffff !important;
 }
 
+.logo-item {
+    margin-right: auto !important;
+}
+
+.logo-link {
+    font-size: 1.5em !important;
+    font-weight: bold !important;
+}
 
 

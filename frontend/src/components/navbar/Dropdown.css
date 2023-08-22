@@ -1,9 +1,9 @@
 .nav-item .dropdown-menu .dropdown-item:hover {
-    background-color: transparent !important;  /* Ensuring no background color on hover */
-    color: #2596be !important;  /* The color you want on hover */
+    background-color: transparent !important;
+    color: #2596be !important;
 }
 
 .nav-item .dropdown-menu .dropdown-item.active {
-    color: red !important;  /* Color for the selected item */
-    background-color: transparent !important;  /* Ensuring no background color for the active state */
+    color: red !important;
+    background-color: transparent !important;
 }
