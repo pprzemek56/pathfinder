@@ -1,0 +1,30 @@
+.homePage {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/*STICKY FOOTER*/
+/*.homePage-content {*/
+/*    flex: 1 0 auto;*/
+/*}*/
+
+/*STICKY FOOTER*/
+/*footer {*/
+/*    flex-shrink: 0;*/
+/*}*/
+
+/*FIXED FOOTER*/
+footer {
+    padding-left: 20px;
+    padding-right: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/*FIXED FOOTER*/
+.homePage-content {
+    padding-bottom: 60px;
+}
