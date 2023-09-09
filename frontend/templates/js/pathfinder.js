@@ -93,99 +93,99 @@ function drawingElements(event) {
 
 }
 
-function drawRectangle(x, y, color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x * 24, y * 24, 24, 24);
-    ctx.strokeStyle = "#0f3052";
-    ctx.strokeRect(x * 24, y * 24, 24, 24);
-}
+// function drawRectangle(x, y, color) {
+//     ctx.fillStyle = color;
+//     ctx.fillRect(x * 24, y * 24, 24, 24);
+//     ctx.strokeStyle = "#0f3052";
+//     ctx.strokeRect(x * 24, y * 24, 24, 24);
+// }
 
-function drawStart(x, y){
-    // Set up the drawing style
-    ctx.fillStyle = "#0f3052";
-    ctx.strokeStyle = "#0f3052";
+// function drawStart(x, y){
+//     // Set up the drawing style
+//     ctx.fillStyle = "#0f3052";
+//     ctx.strokeStyle = "#0f3052";
+//
+//     // Calculate the size and position of the triangle
+//     let triangleSize = a_square * 0.33;
+//     let triangleX = x * a_square + (a_square / 3);
+//     let triangleY = y * a_square + (a_square / 2);
+//
+//     // Draw the triangle
+//     ctx.beginPath();
+//     ctx.moveTo(triangleX, triangleY - triangleSize);
+//     ctx.lineTo(triangleX + triangleSize, triangleY);
+//     ctx.lineTo(triangleX, triangleY + triangleSize);
+//     ctx.closePath();
+//     ctx.fill();
+//     ctx.stroke();
+// }
+//
+// function drawEnd(x, y){
+//     const radius = 9;
+//     const innerRadius = 4;
+//     ctx.beginPath();
+//     ctx.arc(x*24+12, y*24+12, radius, 0, 2*Math.PI, false);
+//     ctx.strokeStyle = "#0f3052";
+//     ctx.lineWidth = 2;
+//     ctx.stroke();
+//     ctx.beginPath();
+//     ctx.arc(x*24+12, y*24+12, innerRadius, 0, 2*Math.PI, false);
+//     ctx.fillStyle = "#0f3052";
+//     ctx.fill();
+// }
 
-    // Calculate the size and position of the triangle
-    let triangleSize = a_square * 0.33;
-    let triangleX = x * a_square + (a_square / 3);
-    let triangleY = y * a_square + (a_square / 2);
-
-    // Draw the triangle
-    ctx.beginPath();
-    ctx.moveTo(triangleX, triangleY - triangleSize);
-    ctx.lineTo(triangleX + triangleSize, triangleY);
-    ctx.lineTo(triangleX, triangleY + triangleSize);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-}
-
-function drawEnd(x, y){
-    const radius = 9;
-    const innerRadius = 4;
-    ctx.beginPath();
-    ctx.arc(x*24+12, y*24+12, radius, 0, 2*Math.PI, false);
-    ctx.strokeStyle = "#0f3052";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(x*24+12, y*24+12, innerRadius, 0, 2*Math.PI, false);
-    ctx.fillStyle = "#0f3052";
-    ctx.fill();
-}
-
-function initBoard() {
-
-    let array = new Array(VERTICAL_SQUARES)
-    for (let i = 0; i < VERTICAL_SQUARES; i++){
-        array[i] = new Array(HORIZONTAL_SQUARES).fill(0);
-    }
-
-    array[start.y][start.x] = 2;
-    array[end.y][end.x] = 3;
-    return array
-}
+// function initBoard() {
+//
+//     let array = new Array(VERTICAL_SQUARES)
+//     for (let i = 0; i < VERTICAL_SQUARES; i++){
+//         array[i] = new Array(HORIZONTAL_SQUARES).fill(0);
+//     }
+//
+//     array[start.y][start.x] = 2;
+//     array[end.y][end.x] = 3;
+//     return array
+// }
 
 
-function drawBoard(b = null) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+// function drawBoard(b = null) {
+//     ctx.clearRect(0, 0, canvas.width, canvas.height);
+//
+//     ctx.strokeStyle = "#0f3052"
+//     ctx.lineWidth = 2;
+//
+//     //Draw horizontal lines
+//     for(let i = 0; i < VERTICAL_SQUARES + 1; i++){
+//         ctx.beginPath();
+//         ctx.moveTo(0, i * a_square);
+//         ctx.lineTo(1272, i * a_square);
+//         ctx.stroke();
+//     }
+//
+//     //Draw vertical lines
+//     for(let i = 0; i < HORIZONTAL_SQUARES + 1; i++){
+//         ctx.beginPath();
+//         ctx.moveTo(i * a_square, 0);
+//         ctx.lineTo(i * a_square, 504);
+//         ctx.stroke();
+//     }
+//
+//     drawStart(start.x, start.y);
+//     drawEnd(end.x, end.y);
+//
+//     if(b !== null){
+//         for (let i = 0; i < 21; i++){
+//             for (let j = 0; j < 53; j++){
+//                 if (b[i][j] === 1){
+//                     drawRectangle(j, i, "#0f3052");
+//                 }
+//             }
+//         }
+//     }
+// }
 
-    ctx.strokeStyle = "#0f3052"
-    ctx.lineWidth = 2;
-
-    //Draw horizontal lines
-    for(let i = 0; i < VERTICAL_SQUARES + 1; i++){
-        ctx.beginPath();
-        ctx.moveTo(0, i * a_square);
-        ctx.lineTo(1272, i * a_square);
-        ctx.stroke();
-    }
-
-    //Draw vertical lines
-    for(let i = 0; i < HORIZONTAL_SQUARES + 1; i++){
-        ctx.beginPath();
-        ctx.moveTo(i * a_square, 0);
-        ctx.lineTo(i * a_square, 504);
-        ctx.stroke();
-    }
-
-    drawStart(start.x, start.y);
-    drawEnd(end.x, end.y);
-
-    if(b !== null){
-        for (let i = 0; i < 21; i++){
-            for (let j = 0; j < 53; j++){
-                if (b[i][j] === 1){
-                    drawRectangle(j, i, "#0f3052");
-                }
-            }
-        }
-    }
-}
-
-window.addEventListener('load', function (){
-    drawBoard();
-});
+// window.addEventListener('load', function (){
+//     drawBoard();
+// });
 
 let startBtn = document.getElementById("start_btn");
 startBtn.addEventListener('click', startVisualization);

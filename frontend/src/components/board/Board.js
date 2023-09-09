@@ -1,8 +1,138 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
+import "./Board.css"
 function Board() {
+    const HORIZONTAL_SQUARES = 53;
+    const VERTICAL_SQUARES = 21;
+    const a_square = 24;
+    const canvasRef = useRef(null);
+    const [start, setStart] = useState({ x: 10, y: 10 });
+    const [end, setEnd] = useState({ x: 41, y: 10 });
+    const [board, setBoard] = useState(initBoard(start, end));
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [clickedSquare, setClickedSquare] = useState(null);
+
+    // 2. Event Handlers
+    const handleMouseDown = (event) => {
+        // ...
+    }
+
+    const handleMouseMove = (event) => {
+        // ...
+    }
+
+    const handleMouseUp = (event) => {
+        // ...
+    }
+
+    // 3. Canvas Drawing Functions
+    function drawRectangle(ctx, x, y, a_square, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x * a_square, y * a_square, a_square, a_square);
+        ctx.strokeStyle = "#0f3052";
+        ctx.strokeRect(x * a_square, y * a_square, a_square, a_square);
+    }
+
+    function drawStart(ctx, x, y, a_square) {
+        const triangleSize = a_square * 0.33;
+        const triangleX = x * a_square + (a_square / 3);
+        const triangleY = y * a_square + (a_square / 2);
+
+        ctx.fillStyle = "#0f3052";
+        ctx.strokeStyle = "#0f3052";
+        ctx.beginPath();
+        ctx.moveTo(triangleX, triangleY - triangleSize);
+        ctx.lineTo(triangleX + triangleSize, triangleY);
+        ctx.lineTo(triangleX, triangleY + triangleSize);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    function drawEnd(ctx, x, y, a_square) {
+        const radius = 9;
+        const innerRadius = 4;
+        const centerX = x * a_square + a_square / 2;
+        const centerY = y * a_square + a_square / 2;
+
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        ctx.strokeStyle = "#0f3052";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI, false);
+        ctx.fillStyle = "#0f3052";
+        ctx.fill();
+    }
+
+    function createBoard(ctx) {
+        ctx.strokeStyle = "#0f3052";
+        ctx.lineWidth = 2;
+
+        // Draw horizontal lines
+        for(let i = 0; i < VERTICAL_SQUARES + 1; i++){
+            ctx.beginPath();
+            ctx.moveTo(0, i * a_square);
+            ctx.lineTo(HORIZONTAL_SQUARES * a_square, i * a_square);
+            ctx.stroke();
+        }
+
+        // Draw vertical lines
+        for(let i = 0; i < HORIZONTAL_SQUARES + 1; i++){
+            ctx.beginPath();
+            ctx.moveTo(i * a_square, 0);
+            ctx.lineTo(i * a_square, VERTICAL_SQUARES * a_square);
+            ctx.stroke();
+        }
+
+        drawStart(ctx, start.x, start.y, a_square);
+        drawEnd(ctx, end.x, end.y, a_square);
+
+        /*for (let i = 0; i < VERTICAL_SQUARES; i++) {
+            for (let j = 0; j < HORIZONTAL_SQUARES; j++) {
+                if (board[i][j] === 1) {
+                    drawRectangle(ctx, j, i, "#0f3052");
+                }
+            }
+        }*/
+    }
+
+    // 4. Utility Functions
+    function initBoard(start, end) {
+        let array = new Array(VERTICAL_SQUARES)
+        for (let i = 0; i < VERTICAL_SQUARES; i++) {
+            array[i] = new Array(HORIZONTAL_SQUARES).fill(0);
+        }
+
+        array[start.y][start.x] = 2;
+        array[end.y][end.x] = 3;
+        return array;
+    }
+
+    // 5. React Effects
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        canvas.addEventListener('mousedown', handleMouseDown);
+        canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mouseup', handleMouseUp);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        createBoard(ctx);
+
+        return () => {
+            canvas.removeEventListener('mousedown', handleMouseDown);
+            canvas.removeEventListener('mousemove', handleMouseMove);
+            canvas.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [canvasRef, board, start, end]);
+
+    // 6. Render
     return (
-        <div></div>
+        <div className="canvas-container">
+            <canvas ref={canvasRef} width={HORIZONTAL_SQUARES * a_square} height={VERTICAL_SQUARES * a_square} />
+        </div>
     );
 }
 
