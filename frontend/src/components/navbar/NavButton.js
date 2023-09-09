@@ -20,7 +20,7 @@ function NavButton({ id, label }) {
                 id={id}
                 onClick={onButtonClick}
             >
-                {label}
+                {isRunning ? "Stop Visualization" : "Start Visualization"}
             </button>
         </li>
     );

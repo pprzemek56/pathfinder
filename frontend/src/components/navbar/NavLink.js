@@ -9,7 +9,7 @@ function NavLink({ id, label, isLogo = false }) {
 
     return (
         <li className={`nav-item ${isLogo ? 'logo-item' : ''}`}>
-            <a className={`nav-link ${isLogo ? 'logo-link' : ''}`} href="#" id={id} onClick={handleClick}>{label}</a>
+            <button className={`nav-link ${isLogo ? 'logo-link' : ''}`} href="#" id={id} onClick={handleClick}>{label}</button>
         </li>
     );
 }
