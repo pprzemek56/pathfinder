@@ -14,7 +14,26 @@ function Board() {
 
     // 2. Event Handlers
     const handleMouseDown = (event) => {
-        // ...
+        const rect = canvasRef.current.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const boardX = Math.floor(x / a_square);
+        const boardY = Math.floor(y / a_square);
+        const ctx = canvasRef.current.getContext('2d');
+
+        if (board[boardY][boardX] === 0) {
+            // The square is empty, place a wall
+            let newBoard = [...board];
+            newBoard[boardY][boardX] = 1;
+            drawRectangle(ctx, boardX, boardY, a_square, "#0f3052");
+            setBoard(newBoard);
+        } else if (board[boardY][boardX] === 1) {
+            // The square contains a wall, remove it
+            let newBoard = [...board];
+            newBoard[boardY][boardX] = 0;
+            drawRectangle(ctx, boardX, boardY, a_square, "#ffffff");
+            setBoard(newBoard);
+        }
     }
 
     const handleMouseMove = (event) => {
@@ -89,13 +108,13 @@ function Board() {
         drawStart(ctx, start.x, start.y, a_square);
         drawEnd(ctx, end.x, end.y, a_square);
 
-        /*for (let i = 0; i < VERTICAL_SQUARES; i++) {
+        for (let i = 0; i < VERTICAL_SQUARES; i++) {
             for (let j = 0; j < HORIZONTAL_SQUARES; j++) {
                 if (board[i][j] === 1) {
-                    drawRectangle(ctx, j, i, "#0f3052");
+                    drawRectangle(ctx, j, i, a_square, "#0f3052");
                 }
             }
-        }*/
+        }
     }
 
     // 4. Utility Functions
