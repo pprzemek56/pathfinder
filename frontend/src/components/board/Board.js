@@ -27,8 +27,33 @@ function Board() {
             newBoard[boardY][boardX] = 1;
             drawRectangle(ctx, boardX, boardY, a_square, "#0f3052");
             setBoard(newBoard);
+            setClickedSquare('wall');
         } else if (board[boardY][boardX] === 1) {
             // The square contains a wall, remove it
+            let newBoard = [...board];
+            newBoard[boardY][boardX] = 0;
+            drawRectangle(ctx, boardX, boardY, a_square, "#ffffff");
+            setBoard(newBoard);
+            setClickedSquare('empty');
+        }
+    }
+
+    const handleMouseMove = (event) => {
+        if (!clickedSquare || event.buttons !== 1) return; // If no square was clicked or mouse button is not pressed, do nothing
+
+        const rect = canvasRef.current.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const boardX = Math.floor(x / a_square);
+        const boardY = Math.floor(y / a_square);
+        const ctx = canvasRef.current.getContext('2d');
+
+        if (clickedSquare === 'wall' && board[boardY][boardX] !== 1) {
+            let newBoard = [...board];
+            newBoard[boardY][boardX] = 1;
+            drawRectangle(ctx, boardX, boardY, a_square, "#0f3052");
+            setBoard(newBoard);
+        } else if (clickedSquare === 'empty' && board[boardY][boardX] !== 0) {
             let newBoard = [...board];
             newBoard[boardY][boardX] = 0;
             drawRectangle(ctx, boardX, boardY, a_square, "#ffffff");
@@ -36,12 +61,8 @@ function Board() {
         }
     }
 
-    const handleMouseMove = (event) => {
-        // ...
-    }
-
     const handleMouseUp = (event) => {
-        // ...
+        setClickedSquare(null);  // Reset the clicked square state
     }
 
     // 3. Canvas Drawing Functions
