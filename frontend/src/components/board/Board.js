@@ -75,7 +75,6 @@ function Board() {
                 }
 
                 setBoard(currentBoard);
-                return;
             }
         } else {
             if ((boardX === start.x && boardY === start.y) || (boardX === end.x && boardY === end.y)) {
@@ -96,7 +95,7 @@ function Board() {
         }
     }
 
-    const handleMouseUp = (event) => {
+    const handleMouseUp = () => {
         setClickedSquare(null);  // Reset the clicked square state
     }
 
