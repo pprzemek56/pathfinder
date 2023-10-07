@@ -21,9 +21,16 @@ function Board() {
         const boardY = Math.floor(y / a_square);
         const ctx = canvasRef.current.getContext('2d');
 
-        // Check if clicked on start or end
-        if ((boardX === start.x && boardY === start.y) || (boardX === end.x && boardY === end.y)) {
-            return;  // If it's start or end, don't proceed
+        if (boardX === start.x && boardY === start.y) {
+            setClickedSquare('start');
+            handleMouseMove(event);
+            return;
+        }
+
+        if (boardX === end.x && boardY === end.y) {
+            setClickedSquare('end');
+            handleMouseMove(event);
+            return;
         }
 
         if (board[boardY][boardX] === 0) {
@@ -44,7 +51,7 @@ function Board() {
     }
 
     const handleMouseMove = (event) => {
-        if (!clickedSquare || event.buttons !== 1) return; // If no square was clicked or mouse button is not pressed, do nothing
+        if (!clickedSquare || event.buttons !== 1) return;
 
         const rect = canvasRef.current.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -53,21 +60,41 @@ function Board() {
         const boardY = Math.floor(y / a_square);
         const ctx = canvasRef.current.getContext('2d');
 
-        // Check if overwriting start or end
-        if ((boardX === start.x && boardY === start.y) || (boardX === end.x && boardY === end.y)) {
-            return;  // If it's start or end, don't proceed
-        }
+        const currentBoard = [...board];  // Clone the current board
 
-        if (clickedSquare === 'wall' && board[boardY][boardX] !== 1) {
-            let newBoard = [...board];
-            newBoard[boardY][boardX] = 1;
-            drawRectangle(ctx, boardX, boardY, a_square, "#0f3052");
-            setBoard(newBoard);
-        } else if (clickedSquare === 'empty' && board[boardY][boardX] !== 0) {
-            let newBoard = [...board];
-            newBoard[boardY][boardX] = 0;
-            drawRectangle(ctx, boardX, boardY, a_square, "#ffffff");
-            setBoard(newBoard);
+        if (clickedSquare === 'start' || clickedSquare === 'end') {
+            if (currentBoard[boardY][boardX] === 0 && (boardX !== end.x || boardY !== end.y) && (boardX !== start.x || boardY !== start.y)) {
+                const newCoord = { x: boardX, y: boardY };
+
+                if (clickedSquare === 'start') {
+                    currentBoard[start.y][start.x] = 0;
+                    currentBoard[boardY][boardX] = 2;
+                    setStart(newCoord);
+                } else {
+                    currentBoard[end.y][end.x] = 0;
+                    currentBoard[boardY][boardX] = 3;
+                    setEnd(newCoord);
+                }
+
+                setBoard(currentBoard);
+                return;
+            }
+        } else {
+            if ((boardX === start.x && boardY === start.y) || (boardX === end.x && boardY === end.y)) {
+                return;  // Avoiding overwriting start or end
+            }
+
+            if (clickedSquare === 'wall' && board[boardY][boardX] !== 1) {
+                let newBoard = [...board];
+                newBoard[boardY][boardX] = 1;
+                drawRectangle(ctx, boardX, boardY, a_square, "#0f3052");
+                setBoard(newBoard);
+            } else if (clickedSquare === 'empty' && board[boardY][boardX] !== 0) {
+                let newBoard = [...board];
+                newBoard[boardY][boardX] = 0;
+                drawRectangle(ctx, boardX, boardY, a_square, "#ffffff");
+                setBoard(newBoard);
+            }
         }
     }
 
@@ -117,6 +144,8 @@ function Board() {
     }
 
     function createBoard(ctx) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, HORIZONTAL_SQUARES * a_square, VERTICAL_SQUARES * a_square);
         ctx.strokeStyle = "#0f3052";
         ctx.lineWidth = 2;
 
@@ -162,26 +191,22 @@ function Board() {
 
     // 5. React Effects
     useEffect(() => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        canvas.addEventListener('mousedown', handleMouseDown);
-        canvas.addEventListener('mousemove', handleMouseMove);
-        canvas.addEventListener('mouseup', handleMouseUp);
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const ctx = canvasRef.current.getContext('2d');
+        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         createBoard(ctx);
-
-        return () => {
-            canvas.removeEventListener('mousedown', handleMouseDown);
-            canvas.removeEventListener('mousemove', handleMouseMove);
-            canvas.removeEventListener('mouseup', handleMouseUp);
-        };
-    }, [canvasRef, board, start, end]);
+    }, [board, start, end]);
 
     // 6. Render
     return (
         <div className="canvas-container">
-            <canvas ref={canvasRef} width={HORIZONTAL_SQUARES * a_square} height={VERTICAL_SQUARES * a_square} />
+            <canvas
+                ref={canvasRef}
+                width={HORIZONTAL_SQUARES * a_square}
+                height={VERTICAL_SQUARES * a_square}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+            />
         </div>
     );
 }
