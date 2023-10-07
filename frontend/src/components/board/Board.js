@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import "./Board.css"
 function Board() {
@@ -9,7 +9,6 @@ function Board() {
     const [start, setStart] = useState({ x: 10, y: 10 });
     const [end, setEnd] = useState({ x: 41, y: 10 });
     const [board, setBoard] = useState(initBoard(start, end));
-    const [isAnimating, setIsAnimating] = useState(false);
     const [clickedSquare, setClickedSquare] = useState(null);
 
     // 2. Event Handlers
@@ -59,7 +58,6 @@ function Board() {
         const boardX = Math.floor(x / a_square);
         const boardY = Math.floor(y / a_square);
         const ctx = canvasRef.current.getContext('2d');
-
         const currentBoard = [...board];  // Clone the current board
 
         if (clickedSquare === 'start' || clickedSquare === 'end') {
@@ -143,11 +141,9 @@ function Board() {
         ctx.fill();
     }
 
-    function createBoard(ctx) {
+    const createBoard = useCallback((ctx) => {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, HORIZONTAL_SQUARES * a_square, VERTICAL_SQUARES * a_square);
-        ctx.strokeStyle = "#0f3052";
-        ctx.lineWidth = 2;
 
         // Draw horizontal lines
         for(let i = 0; i < VERTICAL_SQUARES + 1; i++){
@@ -175,15 +171,11 @@ function Board() {
                 }
             }
         }
-    }
+    }, [board, start, end]);
 
     // 4. Utility Functions
     function initBoard(start, end) {
-        let array = new Array(VERTICAL_SQUARES)
-        for (let i = 0; i < VERTICAL_SQUARES; i++) {
-            array[i] = new Array(HORIZONTAL_SQUARES).fill(0);
-        }
-
+        let array = Array.from({ length: VERTICAL_SQUARES }, () => Array(HORIZONTAL_SQUARES).fill(0));
         array[start.y][start.x] = 2;
         array[end.y][end.x] = 3;
         return array;
@@ -192,9 +184,8 @@ function Board() {
     // 5. React Effects
     useEffect(() => {
         const ctx = canvasRef.current.getContext('2d');
-        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         createBoard(ctx);
-    }, [board, start, end]);
+    }, [board, start, end, createBoard]);
 
     // 6. Render
     return (
