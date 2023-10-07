@@ -21,6 +21,11 @@ function Board() {
         const boardY = Math.floor(y / a_square);
         const ctx = canvasRef.current.getContext('2d');
 
+        // Check if clicked on start or end
+        if ((boardX === start.x && boardY === start.y) || (boardX === end.x && boardY === end.y)) {
+            return;  // If it's start or end, don't proceed
+        }
+
         if (board[boardY][boardX] === 0) {
             // The square is empty, place a wall
             let newBoard = [...board];
@@ -47,6 +52,11 @@ function Board() {
         const boardX = Math.floor(x / a_square);
         const boardY = Math.floor(y / a_square);
         const ctx = canvasRef.current.getContext('2d');
+
+        // Check if overwriting start or end
+        if ((boardX === start.x && boardY === start.y) || (boardX === end.x && boardY === end.y)) {
+            return;  // If it's start or end, don't proceed
+        }
 
         if (clickedSquare === 'wall' && board[boardY][boardX] !== 1) {
             let newBoard = [...board];
