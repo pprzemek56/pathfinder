@@ -1,14 +1,20 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import "./Board.css"
-function Board() {
-    const HORIZONTAL_SQUARES = 53;
-    const VERTICAL_SQUARES = 21;
-    const a_square = 24;
+
+const HORIZONTAL_SQUARES = 53;
+const VERTICAL_SQUARES = 21;
+const a_square = 24;
+
+export function initBoard(start, end) {
+    let array = Array.from({ length: VERTICAL_SQUARES }, () => Array(HORIZONTAL_SQUARES).fill(0));
+    array[start.y][start.x] = 2;
+    array[end.y][end.x] = 3;
+    return array;
+}
+
+function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd} ) {
     const canvasRef = useRef(null);
-    const [start, setStart] = useState({ x: 10, y: 10 });
-    const [end, setEnd] = useState({ x: 41, y: 10 });
-    const [board, setBoard] = useState(initBoard(start, end));
     const [clickedSquare, setClickedSquare] = useState(null);
 
     // 2. Event Handlers
@@ -37,14 +43,14 @@ function Board() {
             let newBoard = [...board];
             newBoard[boardY][boardX] = 1;
             drawRectangle(ctx, boardX, boardY, a_square, "#0f3052");
-            setBoard(newBoard);
+            onSetBoard(newBoard);
             setClickedSquare('wall');
         } else if (board[boardY][boardX] === 1) {
             // The square contains a wall, remove it
             let newBoard = [...board];
             newBoard[boardY][boardX] = 0;
             drawRectangle(ctx, boardX, boardY, a_square, "#ffffff");
-            setBoard(newBoard);
+            onSetBoard(newBoard);
             setClickedSquare('empty');
         }
     }
@@ -67,14 +73,12 @@ function Board() {
                 if (clickedSquare === 'start') {
                     currentBoard[start.y][start.x] = 0;
                     currentBoard[boardY][boardX] = 2;
-                    setStart(newCoord);
+                    onSetStart(newCoord);
                 } else {
                     currentBoard[end.y][end.x] = 0;
                     currentBoard[boardY][boardX] = 3;
-                    setEnd(newCoord);
+                    onSetEnd(newCoord);
                 }
-
-                setBoard(currentBoard);
             }
         } else {
             if ((boardX === start.x && boardY === start.y) || (boardX === end.x && boardY === end.y)) {
@@ -85,12 +89,12 @@ function Board() {
                 let newBoard = [...board];
                 newBoard[boardY][boardX] = 1;
                 drawRectangle(ctx, boardX, boardY, a_square, "#0f3052");
-                setBoard(newBoard);
+                onSetBoard(newBoard);
             } else if (clickedSquare === 'empty' && board[boardY][boardX] !== 0) {
                 let newBoard = [...board];
                 newBoard[boardY][boardX] = 0;
                 drawRectangle(ctx, boardX, boardY, a_square, "#ffffff");
-                setBoard(newBoard);
+                onSetBoard(newBoard);
             }
         }
     }
@@ -171,14 +175,6 @@ function Board() {
             }
         }
     }, [board, start, end]);
-
-    // 4. Utility Functions
-    function initBoard(start, end) {
-        let array = Array.from({ length: VERTICAL_SQUARES }, () => Array(HORIZONTAL_SQUARES).fill(0));
-        array[start.y][start.x] = 2;
-        array[end.y][end.x] = 3;
-        return array;
-    }
 
     // 5. React Effects
     useEffect(() => {

@@ -33,7 +33,7 @@ function Dropdown({ id, label, items, selectedItem, onSelectItem }) {
 
     return (
         <li className={isOpen ? "nav-item dropdown show" : "nav-item dropdown"} ref={dropdownRef}>
-            <button className="nav-link dropdown-toggle" id={id} role="button" onClick={toggleDropdown} aria-expanded={isOpen}>
+            <button className="nav-link dropdown-toggle" id={id} onClick={toggleDropdown} aria-expanded={isOpen}>
                 {label}
             </button>
             {isOpen && (
@@ -42,7 +42,6 @@ function Dropdown({ id, label, items, selectedItem, onSelectItem }) {
                         <li key={item.id}>
                             <button
                                 className={`dropdown-item ${selectedItem && selectedItem.id === item.id ? 'active' : ''}`}
-                                href="#"
                                 id={item.id}
                                 onClick={() => handleItemClick(item)}
                             >
