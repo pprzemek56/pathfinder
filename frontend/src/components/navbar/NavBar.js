@@ -41,7 +41,7 @@ function NavBar({ onClearBoard, isRunning, onToggleRunning }) {
                             onSelectItem={setSelectedAlgorithm}
                         />
                         <NavButton isRunning={isRunning} onToggleRunning={onToggleRunning} />
-                        <NavLink id="clear-board" label="Clear Board" onClick={onClearBoard} />
+                        <NavLink id="clear-board" label="Clear Board" onClick={onClearBoard} isRunning={isRunning}/>
                         <NavLink id="about-project" label="About Project" />
                     </ul>
                 </div>

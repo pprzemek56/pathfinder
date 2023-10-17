@@ -16,6 +16,8 @@ function HomePage() {
     };
 
     const handleClearBoard = () => {
+        if (isRunning) return;
+
         const newBoard = initBoard(start, end);
         setBoard(newBoard);
     };
