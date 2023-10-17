@@ -5,7 +5,7 @@ import Dropdown from "./Dropdown";
 import NavButton from "./NavButton";
 import NavLink from "./NavLink";
 
-function NavBar({ onClearBoard }) {
+function NavBar({ onClearBoard, isRunning, onToggleRunning }) {
     const [selectedSpeed, setSelectedSpeed] = useState(null);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
 
@@ -40,7 +40,7 @@ function NavBar({ onClearBoard }) {
                             selectedItem={selectedAlgorithm}
                             onSelectItem={setSelectedAlgorithm}
                         />
-                        <NavButton id="start_btn" label="Start Visualization!" />
+                        <NavButton isRunning={isRunning} onToggleRunning={onToggleRunning} />
                         <NavLink id="clear-board" label="Clear Board" onClick={onClearBoard} />
                         <NavLink id="about-project" label="About Project" />
                     </ul>

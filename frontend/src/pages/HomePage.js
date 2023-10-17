@@ -9,6 +9,11 @@ function HomePage() {
     const [start, setStart] = useState({ x: 10, y: 10 });
     const [end, setEnd] = useState({ x: 41, y: 10 });
     const [board, setBoard] = useState(initBoard(start, end));
+    const [isRunning, setIsRunning] = useState(false);
+
+    const onToggleRunning = () => {
+        setIsRunning(prevState => !prevState);
+    };
 
     const handleClearBoard = () => {
         const newBoard = initBoard(start, end);
@@ -29,7 +34,7 @@ function HomePage() {
 
     return (
         <div className='homePage'>
-            <NavBar onClearBoard={handleClearBoard}/>
+            <NavBar onClearBoard={handleClearBoard} isRunning={isRunning} onToggleRunning={onToggleRunning} />
             <div className="homePage-content">
                 <div className="board">
                     <Board
@@ -39,6 +44,7 @@ function HomePage() {
                         onSetBoard={handleSetBoard}
                         onSetStart={handleSetStart}
                         onSetEnd={handleSetEnd}
+                        isRunning={isRunning}
                     />
                 </div>
             </div>

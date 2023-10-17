@@ -13,12 +13,14 @@ export function initBoard(start, end) {
     return array;
 }
 
-function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd} ) {
+function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning} ) {
     const canvasRef = useRef(null);
     const [clickedSquare, setClickedSquare] = useState(null);
 
     // 2. Event Handlers
     const handleMouseDown = (event) => {
+        if(isRunning) return;
+
         const rect = canvasRef.current.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
@@ -56,6 +58,8 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd} ) {
     }
 
     const handleMouseMove = (event) => {
+        if(isRunning) return;
+
         if (!clickedSquare || event.buttons !== 1) return;
 
         const rect = canvasRef.current.getBoundingClientRect();

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 
-function NavButton({ id, label }) {
-    const [isRunning, setIsRunning] = useState(false);
-
+function NavButton({ id, isRunning, onToggleRunning }) {
     const onButtonClick = () => {
-        setIsRunning(!isRunning);
+        onToggleRunning();
         if (!isRunning) {
             console.log("Starting the visualization algorithm...");
         } else {
