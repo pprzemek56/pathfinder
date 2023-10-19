@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import {visualize} from "../../utils/api";
 
-function NavButton({ id, isRunning, onToggleRunning }) {
-    const onButtonClick = () => {
+function NavButton({ id, isRunning, onToggleRunning, board }) {
+    const onButtonClick = async () => {
         onToggleRunning();
+
         if (!isRunning) {
-            console.log("Starting the visualization algorithm...");
+            const data = {
+                board: board,
+            };
+
+            try {
+                const result = await visualize(data);
+                const { visited, shortest_path } = result;
+
+                console.log("VISITED: " + visited);
+                console.log("SHORTEST PATH: " + shortest_path);
+
+            } catch (error) {
+                console.error("Error visualizing the path:", error.message);
+            }
         } else {
             console.log("Stopping the visualization algorithm...");
         }

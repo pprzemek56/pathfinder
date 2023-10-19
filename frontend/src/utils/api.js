@@ -1,7 +1,7 @@
 const BASE_URL = 'http://localhost:8000';
 
 export const visualize = async (data) => {
-    const response = await fetch(`${BASE_URL}/visualize`, {
+    const response = await fetch(`${BASE_URL}/visualize/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

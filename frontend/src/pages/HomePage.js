@@ -36,7 +36,7 @@ function HomePage() {
 
     return (
         <div className='homePage'>
-            <NavBar onClearBoard={handleClearBoard} isRunning={isRunning} onToggleRunning={onToggleRunning} />
+            <NavBar onClearBoard={handleClearBoard} isRunning={isRunning} onToggleRunning={onToggleRunning} board={board}/>
             <div className="homePage-content">
                 <div className="board">
                     <Board
