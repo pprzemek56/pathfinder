@@ -1,12 +1,13 @@
 import {visualize} from "../../utils/api";
 
-function NavButton({ id, isRunning, onToggleRunning, board }) {
+function NavButton({ id, isRunning, onToggleRunning, board, algorithm }) {
     const onButtonClick = async () => {
         onToggleRunning();
 
         if (!isRunning) {
             const data = {
                 board: board,
+                algorithm: algorithm,
             };
 
             try {
