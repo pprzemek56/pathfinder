@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import "./Board.css"
 
 const HORIZONTAL_SQUARES = 53;
 const VERTICAL_SQUARES = 21;
-const a_square = 24;
+export const a_square = 24;
 
 export function initBoard(start, end) {
     let array = Array.from({ length: VERTICAL_SQUARES }, () => Array(HORIZONTAL_SQUARES).fill(0));
@@ -13,8 +13,14 @@ export function initBoard(start, end) {
     return array;
 }
 
-function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning} ) {
-    const canvasRef = useRef(null);
+export function drawRectangle(ctx, x, y, a_square, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x * a_square, y * a_square, a_square, a_square);
+        ctx.strokeStyle = "#0f3052";
+        ctx.strokeRect(x * a_square, y * a_square, a_square, a_square);
+    }
+
+function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning, canvasRef} ) {
     const [clickedSquare, setClickedSquare] = useState(null);
 
     // 2. Event Handlers
@@ -105,14 +111,6 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning}
 
     const handleMouseUp = () => {
         setClickedSquare(null);  // Reset the clicked square state
-    }
-
-    // 3. Canvas Drawing Functions
-    function drawRectangle(ctx, x, y, a_square, color) {
-        ctx.fillStyle = color;
-        ctx.fillRect(x * a_square, y * a_square, a_square, a_square);
-        ctx.strokeStyle = "#0f3052";
-        ctx.strokeRect(x * a_square, y * a_square, a_square, a_square);
     }
 
     function drawStart(ctx, x, y, a_square) {

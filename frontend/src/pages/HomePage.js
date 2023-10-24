@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 
 import NavBar from "../components/navbar/NavBar";
 import Footer from "../components/footer/Footer";
@@ -10,6 +10,7 @@ function HomePage() {
     const [end, setEnd] = useState({ x: 41, y: 10 });
     const [board, setBoard] = useState(initBoard(start, end));
     const [isRunning, setIsRunning] = useState(false);
+    const canvasRef = useRef(null);
 
     const onToggleRunning = () => {
         setIsRunning(prevState => !prevState);
@@ -36,10 +37,17 @@ function HomePage() {
 
     return (
         <div className='homePage'>
-            <NavBar onClearBoard={handleClearBoard} isRunning={isRunning} onToggleRunning={onToggleRunning} board={board}/>
+            <NavBar
+                canvasRef={canvasRef}
+                onClearBoard={handleClearBoard}
+                isRunning={isRunning}
+                onToggleRunning={onToggleRunning}
+                board={board}
+            />
             <div className="homePage-content">
                 <div className="board">
                     <Board
+                        canvasRef={canvasRef}
                         board={board}
                         start={start}
                         end={end}
