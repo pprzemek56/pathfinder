@@ -17,8 +17,13 @@ function NavButton({ id, isRunning, onToggleRunning, board, algorithm, canvasRef
                 console.log(result);
                 const { visited, shortest_path } = result;
 
+                const totalVisitedAnimationDuration = visited.length * 50;
+
                 animateVisited(visited, ctx);
-                animateShortestPath(shortest_path, ctx);
+
+                setTimeout(() => {
+                    animateShortestPath(shortest_path, ctx);
+                }, totalVisitedAnimationDuration);
 
             } catch (error) {
                 console.error("Error visualizing the path:", error.message);

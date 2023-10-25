@@ -15,5 +15,15 @@ export const animateVisited = (visited, ctx) => {
 };
 
 export const animateShortestPath = (shortestPath, ctx) => {
-    // Logic to animate the shortest path
+    const pathSquares = shortestPath.map(node => ({x: node.x, y: node.y}));
+
+    let delay = 0;
+    const animationSpeed = 50;  // Adjust this value to change the speed of the animation
+
+    pathSquares.forEach(square => {
+        setTimeout(() => {
+            drawRectangle(ctx, square.x, square.y, a_square, "#05fa46");
+        }, delay);
+        delay += animationSpeed;
+    });
 };
