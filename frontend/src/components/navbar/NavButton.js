@@ -1,7 +1,7 @@
 import {visualize} from "../../utils/api";
 import {animateShortestPath, animateVisited} from "../board/animations";
 
-function NavButton({ id, isRunning, onToggleRunning, board, algorithm, canvasRef }) {
+function NavButton({ id, isRunning, onToggleRunning, board, algorithm, canvasRef, start, end }) {
     const onButtonClick = async () => {
         const ctx = canvasRef.current.getContext('2d');
         onToggleRunning();
@@ -14,15 +14,14 @@ function NavButton({ id, isRunning, onToggleRunning, board, algorithm, canvasRef
 
             try {
                 const result = await visualize(data);
-                console.log(result);
                 const { visited, shortest_path } = result;
 
                 const totalVisitedAnimationDuration = visited.length * 50;
 
-                animateVisited(visited, ctx);
+                animateVisited(visited, start, end, ctx);
 
                 setTimeout(() => {
-                    animateShortestPath(shortest_path, ctx);
+                    animateShortestPath(shortest_path, start, end, ctx);
                 }, totalVisitedAnimationDuration);
 
             } catch (error) {

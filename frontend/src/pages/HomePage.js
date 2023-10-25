@@ -43,6 +43,8 @@ function HomePage() {
                 isRunning={isRunning}
                 onToggleRunning={onToggleRunning}
                 board={board}
+                start={start}
+                end={end}
             />
             <div className="homePage-content">
                 <div className="board">
