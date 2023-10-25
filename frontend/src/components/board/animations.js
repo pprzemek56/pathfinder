@@ -4,10 +4,11 @@ export const animateVisited = (visited, start, end, ctx) => {
     const visitedSquares = visited.map(node => ({x: node.x, y: node.y}));
 
     let delay = 0;
-    const animationSpeed = 50;  // Adjust this value to change the speed of the animation
+    const animationSpeed = 50;
+    let timeouts = [];
 
     visitedSquares.forEach(square => {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
             drawRectangle(ctx, square.x, square.y, a_square, "#05e1f5");
 
             if (square.x === start.x && square.y === start.y) {
@@ -17,18 +18,21 @@ export const animateVisited = (visited, start, end, ctx) => {
             }
 
         }, delay);
+        timeouts.push(timeout);
         delay += animationSpeed;
     });
+    return timeouts;
 };
 
 export const animateShortestPath = (shortestPath, start, end, ctx) => {
     const pathSquares = shortestPath.map(node => ({x: node.x, y: node.y}));
 
     let delay = 0;
-    const animationSpeed = 50;  // Adjust this value to change the speed of the animation
+    const animationSpeed = 50;
+    const shortestPathTimeouts = [];
 
     pathSquares.forEach(square => {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
             drawRectangle(ctx, square.x, square.y, a_square, "#05fa46");
 
             if (square.x === start.x && square.y === start.y) {
@@ -38,6 +42,8 @@ export const animateShortestPath = (shortestPath, start, end, ctx) => {
             }
 
         }, delay);
+        shortestPathTimeouts.push(timeout);
         delay += animationSpeed;
     });
+    return shortestPathTimeouts;
 };

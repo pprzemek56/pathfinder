@@ -1,7 +1,9 @@
 import {visualize} from "../../utils/api";
 import {animateShortestPath, animateVisited} from "../board/animations";
+import {useState} from "react";
 
 function NavButton({ id, isRunning, onToggleRunning, board, algorithm, canvasRef, start, end }) {
+    const [timeouts, setTimeouts] = useState([]);
     const onButtonClick = async () => {
         const ctx = canvasRef.current.getContext('2d');
         onToggleRunning();
@@ -17,17 +19,19 @@ function NavButton({ id, isRunning, onToggleRunning, board, algorithm, canvasRef
                 const { visited, shortest_path } = result;
 
                 const totalVisitedAnimationDuration = visited.length * 50;
+                const visitedTimeouts = animateVisited(visited, start, end, ctx);
 
-                animateVisited(visited, start, end, ctx);
-
-                setTimeout(() => {
-                    animateShortestPath(shortest_path, start, end, ctx);
+                const shortestPathDelay = setTimeout(() => {
+                    const shortestPathTimeouts = animateShortestPath(shortest_path, start, end, ctx);
+                    setTimeouts(prev => [...prev, ...shortestPathTimeouts]);
                 }, totalVisitedAnimationDuration);
 
+                setTimeouts([...visitedTimeouts, shortestPathDelay]);
             } catch (error) {
                 console.error("Error visualizing the path:", error.message);
             }
         } else {
+            timeouts.forEach(timeout => clearTimeout(timeout));
             console.log("Stopping the visualization algorithm...");
         }
     };
