@@ -12,10 +12,6 @@ function HomePage() {
     const [isRunning, setIsRunning] = useState(false);
     const canvasRef = useRef(null);
 
-    const onToggleRunning = () => {
-        setIsRunning(prevState => !prevState);
-    };
-
     const handleClearBoard = () => {
         if (isRunning) return;
 
@@ -41,7 +37,7 @@ function HomePage() {
                 canvasRef={canvasRef}
                 onClearBoard={handleClearBoard}
                 isRunning={isRunning}
-                onToggleRunning={onToggleRunning}
+                setIsRunning={setIsRunning}
                 board={board}
                 start={start}
                 end={end}

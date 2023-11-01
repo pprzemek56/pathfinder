@@ -2,11 +2,10 @@ import {visualize} from "../../utils/api";
 import {animateShortestPath, animateVisited} from "../board/animations";
 import {useState} from "react";
 
-function NavButton({ id, isRunning, onToggleRunning, board, algorithm, canvasRef, start, end }) {
+function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end }) {
     const [timeouts, setTimeouts] = useState([]);
     const onButtonClick = async () => {
         const ctx = canvasRef.current.getContext('2d');
-        onToggleRunning();
 
         if (!isRunning) {
             const data = {
