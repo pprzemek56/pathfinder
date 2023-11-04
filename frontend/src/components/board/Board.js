@@ -183,7 +183,7 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
     useEffect(() => {
         const ctx = canvasRef.current.getContext('2d');
         createBoard(ctx);
-    }, [board, start, end, createBoard]);
+    }, [board, start, end, createBoard, canvasRef]);
 
     // 6. Render
     return (
