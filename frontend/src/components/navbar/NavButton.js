@@ -19,12 +19,12 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
                 const { visited, shortest_path } = result;
 
                 const totalVisitedAnimationDuration = visited.length * 50;
-                const visitedTimeouts = animateVisited(visited, start, end, ctx);
+                const visitedTimeouts = animateVisited(visited, ctx, start, end);
 
-                animateVisited(visited, ctx);
+                animateVisited(visited, ctx, start, end);
 
                 setTimeout(() => {
-                    animateShortestPath(shortest_path, ctx);
+                    animateShortestPath(shortest_path, ctx, start, end);
                 }, totalVisitedAnimationDuration);
 
                 setTimeouts([...visitedTimeouts]);

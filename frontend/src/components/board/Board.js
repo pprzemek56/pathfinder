@@ -14,11 +14,45 @@ export function initBoard(start, end) {
 }
 
 export function drawRectangle(ctx, x, y, a_square, color) {
-        ctx.fillStyle = color;
-        ctx.fillRect(x * a_square, y * a_square, a_square, a_square);
-        ctx.strokeStyle = "#0f3052";
-        ctx.strokeRect(x * a_square, y * a_square, a_square, a_square);
-    }
+    ctx.fillStyle = color;
+    ctx.fillRect(x * a_square, y * a_square, a_square, a_square);
+    ctx.strokeStyle = "#0f3052";
+    ctx.strokeRect(x * a_square, y * a_square, a_square, a_square);
+}
+
+export function drawStart(ctx, x, y, a_square) {
+    const triangleSize = a_square * 0.33;
+    const triangleX = x * a_square + (a_square / 3);
+    const triangleY = y * a_square + (a_square / 2);
+
+    ctx.fillStyle = "#0f3052";
+    ctx.strokeStyle = "#0f3052";
+    ctx.beginPath();
+    ctx.moveTo(triangleX, triangleY - triangleSize);
+    ctx.lineTo(triangleX + triangleSize, triangleY);
+    ctx.lineTo(triangleX, triangleY + triangleSize);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+}
+
+export function drawEnd(ctx, x, y, a_square) {
+    const radius = 9;
+    const innerRadius = 4;
+    const centerX = x * a_square + a_square / 2;
+    const centerY = y * a_square + a_square / 2;
+
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    ctx.strokeStyle = "#0f3052";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "#0f3052";
+    ctx.fill();
+}
+
 
 function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning, canvasRef} ) {
     const [clickedSquare, setClickedSquare] = useState(null);
@@ -111,39 +145,6 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
 
     const handleMouseUp = () => {
         setClickedSquare(null);  // Reset the clicked square state
-    }
-
-    function drawStart(ctx, x, y, a_square) {
-        const triangleSize = a_square * 0.33;
-        const triangleX = x * a_square + (a_square / 3);
-        const triangleY = y * a_square + (a_square / 2);
-
-        ctx.fillStyle = "#0f3052";
-        ctx.strokeStyle = "#0f3052";
-        ctx.beginPath();
-        ctx.moveTo(triangleX, triangleY - triangleSize);
-        ctx.lineTo(triangleX + triangleSize, triangleY);
-        ctx.lineTo(triangleX, triangleY + triangleSize);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-    }
-
-    function drawEnd(ctx, x, y, a_square) {
-        const radius = 9;
-        const innerRadius = 4;
-        const centerX = x * a_square + a_square / 2;
-        const centerY = y * a_square + a_square / 2;
-
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-        ctx.strokeStyle = "#0f3052";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI, false);
-        ctx.fillStyle = "#0f3052";
-        ctx.fill();
     }
 
     const createBoard = useCallback((ctx) => {

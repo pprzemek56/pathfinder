@@ -47,6 +47,8 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start
                             setIsRunning={setIsRunning}
                             board={board}
                             algorithm={selectedAlgorithm?.id}
+                            start={start}
+                            end={end}
                         />
                         <NavLink id="clear-board" label="Clear Board" onClick={onClearBoard} isRunning={isRunning}/>
                         <NavLink id="about-project" label="About Project" />
