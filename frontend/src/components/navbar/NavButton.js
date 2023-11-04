@@ -15,17 +15,19 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
 
             try {
                 const result = await visualize(data);
+                console.log(result);
                 const { visited, shortest_path } = result;
 
                 const totalVisitedAnimationDuration = visited.length * 50;
                 const visitedTimeouts = animateVisited(visited, start, end, ctx);
 
-                const shortestPathDelay = setTimeout(() => {
-                    const shortestPathTimeouts = animateShortestPath(shortest_path, start, end, ctx);
-                    setTimeouts(prev => [...prev, ...shortestPathTimeouts]);
+                animateVisited(visited, ctx);
+
+                setTimeout(() => {
+                    animateShortestPath(shortest_path, ctx);
                 }, totalVisitedAnimationDuration);
 
-                setTimeouts([...visitedTimeouts, shortestPathDelay]);
+                setTimeouts([...visitedTimeouts]);
             } catch (error) {
                 console.error("Error visualizing the path:", error.message);
             }

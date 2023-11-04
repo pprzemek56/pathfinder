@@ -1,6 +1,6 @@
-import {a_square, drawRectangle, drawEnd, drawStart} from "./Board";
+import {a_square, drawRectangle} from "./Board";
 
-export const animateVisited = (visited, start, end, ctx) => {
+export const animateVisited = (visited, ctx) => {
     const visitedSquares = visited.map(node => ({x: node.x, y: node.y}));
 
     let delay = 0;
@@ -10,13 +10,6 @@ export const animateVisited = (visited, start, end, ctx) => {
     visitedSquares.forEach(square => {
         const timeout = setTimeout(() => {
             drawRectangle(ctx, square.x, square.y, a_square, "#05e1f5");
-
-            if (square.x === start.x && square.y === start.y) {
-                drawStart(ctx, square.x, square.y, a_square);
-            } else if (square.x === end.x && square.y === end.y) {
-                drawEnd(ctx, square.x, square.y, a_square);
-            }
-
         }, delay);
         timeouts.push(timeout);
         delay += animationSpeed;
@@ -24,7 +17,7 @@ export const animateVisited = (visited, start, end, ctx) => {
     return timeouts;
 };
 
-export const animateShortestPath = (shortestPath, start, end, ctx) => {
+export const animateShortestPath = (shortestPath, ctx) => {
     const pathSquares = shortestPath.map(node => ({x: node.x, y: node.y}));
 
     let delay = 0;
@@ -34,13 +27,6 @@ export const animateShortestPath = (shortestPath, start, end, ctx) => {
     pathSquares.forEach(square => {
         const timeout = setTimeout(() => {
             drawRectangle(ctx, square.x, square.y, a_square, "#05fa46");
-
-            if (square.x === start.x && square.y === start.y) {
-                drawStart(ctx, square.x, square.y, a_square);
-            } else if (square.x === end.x && square.y === end.y) {
-                drawEnd(ctx, square.x, square.y, a_square);
-            }
-
         }, delay);
         shortestPathTimeouts.push(timeout);
         delay += animationSpeed;
