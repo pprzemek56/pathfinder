@@ -53,6 +53,17 @@ export function drawEnd(ctx, x, y, a_square) {
     ctx.fill();
 }
 
+export function clearPath(ctx, board) {
+    for (let y = 0; y < VERTICAL_SQUARES; y++) {
+        for (let x = 0; x < HORIZONTAL_SQUARES; x++) {
+            // If the square is not a wall, start, or end, clear it
+            if (board[y][x] !== 1 && board[y][x] !== 2 && board[y][x] !== 3) {
+                drawRectangle(ctx, x, y, a_square, "#ffffff"); // Assuming white is the background color
+            }
+        }
+    }
+}
+
 
 function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning, canvasRef} ) {
     const [clickedSquare, setClickedSquare] = useState(null);
@@ -182,6 +193,7 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
     // 5. React Effects
     useEffect(() => {
         const ctx = canvasRef.current.getContext('2d');
+        clearPath(ctx, board);
         createBoard(ctx);
     }, [board, start, end, createBoard, canvasRef]);
 

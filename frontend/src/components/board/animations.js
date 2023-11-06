@@ -1,9 +1,8 @@
-import {a_square, drawEnd, drawRectangle, drawStart} from "./Board";
+import board, {a_square, drawEnd, drawRectangle, drawStart} from "./Board";
 
 export const animateVisited = (visited, ctx, start, end, speed) => {
     const visitedSquares = visited.map(node => ({x: node.x, y: node.y}));
     let delay = 0;
-    // const animationSpeed = 50;
     let timeouts = [];
 
     visitedSquares.forEach(square => {
@@ -25,7 +24,6 @@ export const animateVisited = (visited, ctx, start, end, speed) => {
 export const animateShortestPath = (shortestPath, ctx, start, end, speed) => {
     const pathSquares = shortestPath.map(node => ({x: node.x, y: node.y}));
     let delay = 0;
-    // const animationSpeed = 50;
     const shortestPathTimeouts = [];
 
     pathSquares.forEach(square => {
