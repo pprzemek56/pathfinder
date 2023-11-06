@@ -1,9 +1,10 @@
 import {visualize} from "../../utils/api";
 import {animateShortestPath, animateVisited} from "../board/animations";
 import "./NavButton.css"
-function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end }) {
+function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end, speed }) {
     const onButtonClick = async () => {
         const ctx = canvasRef.current.getContext('2d');
+        const animationSpeed = parseInt(speed, 10);
 
         const data = {
             board: board,
@@ -15,13 +16,13 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
                 const result = await visualize(data);
                 const { visited, shortest_path } = result;
 
-                const totalVisitedAnimationDuration = visited.length * 50;
-                const totalShortestPathAnimationDuration = shortest_path.length * 50;
+                const totalVisitedAnimationDuration = visited.length * animationSpeed;
+                const totalShortestPathAnimationDuration = shortest_path.length * animationSpeed;
                 setIsRunning(true);
-                animateVisited(visited, ctx, start, end);
+                animateVisited(visited, ctx, start, end, animationSpeed);
 
                 setTimeout(() => {
-                    animateShortestPath(shortest_path, ctx, start, end);
+                    animateShortestPath(shortest_path, ctx, start, end, animationSpeed);
 
                     setTimeout(() => {
                         setIsRunning(false);

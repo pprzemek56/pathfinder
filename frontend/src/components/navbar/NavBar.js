@@ -11,9 +11,9 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
 
     const speedItems = [
-        {id: 'fast', label: 'Fast'},
-        {id: 'medium', label: 'Medium'},
-        {id: 'slow', label: 'Slow'}
+        {id: '10', label: 'Fast'},
+        {id: '50', label: 'Medium'},
+        {id: '250', label: 'Slow'}
     ]
 
     const algorithmItems = [
@@ -49,6 +49,7 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start
                             algorithm={selectedAlgorithm?.id}
                             start={start}
                             end={end}
+                            speed={selectedSpeed?.id}
                         />
                         <NavLink id="clear-board" label="Clear Board" onClick={onClearBoard} isRunning={isRunning}/>
                         <NavLink id="about-project" label="About Project" />
