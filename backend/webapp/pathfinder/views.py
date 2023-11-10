@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -27,6 +28,6 @@ def visualize(request: Request):
     if path_serializer.is_valid():
         response = Response(data=path_serializer.data)
     else:
-        return Response(data=path_serializer.errors)
+        return Response(data=path_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return response

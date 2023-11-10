@@ -4,13 +4,25 @@ import NavBar from "../components/navbar/NavBar";
 import Footer from "../components/footer/Footer";
 import Board, { initBoard } from "../components/board/Board";
 import './HomePage.css'
+import Popup from "../components/popup/Popup";
 
 function HomePage() {
     const [start, setStart] = useState({ x: 10, y: 10 });
     const [end, setEnd] = useState({ x: 41, y: 10 });
     const [board, setBoard] = useState(initBoard(start, end));
     const [isRunning, setIsRunning] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [message, setMessage] = useState('');
     const canvasRef = useRef(null);
+
+    const handleShowPopup = (message) => {
+        setMessage(message);
+        setShowPopup(true);
+    };
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
+    };
 
     const handleClearBoard = () => {
         if (isRunning) return;
@@ -41,6 +53,8 @@ function HomePage() {
                 board={board}
                 start={start}
                 end={end}
+                setMessage={setMessage}
+                setShowPopup={setShowPopup}
             />
             <div className="homePage-content">
                 <div className="board">
@@ -57,6 +71,7 @@ function HomePage() {
                 </div>
             </div>
             <Footer />
+            {showPopup && <Popup message={message} onClose={handleClosePopup} />}
         </div>
     );
 }

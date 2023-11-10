@@ -2,10 +2,16 @@ import {visualize} from "../../utils/api";
 import {animateShortestPath, animateVisited} from "../board/animations";
 import "./NavButton.css"
 import {clearPath} from "../board/Board";
-function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end, speed }) {
+function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end, speed, setMessage, setShowPopup }) {
     const onButtonClick = async () => {
         const ctx = canvasRef.current.getContext('2d');
         const animationSpeed = parseInt(speed, 10);
+
+        if (!algorithm) {
+            setMessage("Please select an algorithm.");
+            setShowPopup(true);
+            return;
+        }
 
         const data = {
             board: board,
@@ -16,8 +22,8 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
             try {
                 const result = await visualize(data);
                 const { visited, shortest_path } = result;
-                clearPath(ctx, board);
 
+                clearPath(ctx, board);
                 const totalVisitedAnimationDuration = visited.length * animationSpeed;
                 const totalShortestPathAnimationDuration = shortest_path.length * animationSpeed;
                 setIsRunning(true);
@@ -32,7 +38,9 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
                 }, totalVisitedAnimationDuration);
 
             } catch (error) {
-                console.error("Error visualizing the path:", error.message);
+                console.log("ERROR");
+                setMessage("The shortest path doesn't exist.");
+                setShowPopup(true);
             }
         }
     };
