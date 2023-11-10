@@ -57,8 +57,13 @@ export function clearPath(ctx, board) {
     for (let y = 0; y < VERTICAL_SQUARES; y++) {
         for (let x = 0; x < HORIZONTAL_SQUARES; x++) {
             // If the square is not a wall, start, or end, clear it
-            if (board[y][x] !== 1 && board[y][x] !== 2 && board[y][x] !== 3) {
-                drawRectangle(ctx, x, y, a_square, "#ffffff"); // Assuming white is the background color
+            if (board[y][x] !== 1 && board[y][x] !== 2) {
+                drawRectangle(ctx, x, y, a_square, "#ffffff");
+            }
+
+            if (board[y][x] === 3) {
+                drawRectangle(ctx, x, y, a_square, "#ffffff");
+                drawEnd(ctx, x, y, a_square);
             }
         }
     }
