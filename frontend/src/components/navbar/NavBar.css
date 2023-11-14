@@ -34,3 +34,31 @@
 .navbar-nav li:last-child {
   margin-right: 150px;
 }
+
+/* Adjustments for screens up to 1366px wide */
+@media (max-width: 1366px) {
+    .navbar-nav li {
+        margin-right: 3rem; /* Slightly reduced margin */
+        font-size: 16px; /* Slightly smaller font size */
+    }
+
+    .navbar-brand {
+        font-size: 1.75rem; /* Adjusted brand size */
+    }
+
+    /* Additional adjustments can be added here if needed */
+}
+
+/* Further adjustments for screens up to 1024px wide */
+@media (max-width: 1024px) {
+    .navbar-nav li {
+        margin-right: 2rem; /* Further reduced margin */
+        font-size: 14px; /* Further reduced font size */
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem; /* Smaller brand size */
+    }
+
+    /* Additional adjustments can be added here if needed */
+}
