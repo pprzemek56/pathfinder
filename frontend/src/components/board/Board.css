@@ -3,5 +3,8 @@
     justify-content: center;
     align-items: center;
     height: 75vh;
+    margin: 20px auto;
+    max-width: 90vw;
+    overflow: auto;
 }
 

@@ -27,10 +27,10 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
                 const totalVisitedAnimationDuration = visited.length * animationSpeed;
                 const totalShortestPathAnimationDuration = shortest_path.length * animationSpeed;
                 setIsRunning(true);
-                animateVisited(visited, ctx, start, end, animationSpeed,squareSize);
+                animateVisited(visited, ctx, start, end, animationSpeed, squareSize, squareSize / 12);
 
                 setTimeout(() => {
-                    animateShortestPath(shortest_path, ctx, start, end, animationSpeed, squareSize);
+                    animateShortestPath(shortest_path, ctx, start, end, animationSpeed, squareSize, squareSize / 12);
 
                     setTimeout(() => {
                         setIsRunning(false);

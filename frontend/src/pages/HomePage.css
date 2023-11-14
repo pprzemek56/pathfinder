@@ -4,6 +4,11 @@
     min-height: 100vh;
 }
 
+.homePage-content {
+    padding-bottom: 60px;
+}
+
+
 footer {
     padding-left: 20px;
     padding-right: 20px;
@@ -11,9 +16,4 @@ footer {
     bottom: 0;
     width: 100%;
     z-index: 1000;
-}
-
-/*FIXED FOOTER*/
-.homePage-content {
-    padding-bottom: 60px;
 }

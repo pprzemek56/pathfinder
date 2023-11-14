@@ -4,7 +4,6 @@ import "./Board.css"
 
 const HORIZONTAL_SQUARES = 53;
 const VERTICAL_SQUARES = 21;
-// export const a_square = 24;
 
 export function initBoard(start, end) {
     let array = Array.from({ length: VERTICAL_SQUARES }, () => Array(HORIZONTAL_SQUARES).fill(0));
@@ -13,10 +12,11 @@ export function initBoard(start, end) {
     return array;
 }
 
-export function drawRectangle(ctx, x, y, a_square, color) {
+export function drawRectangle(ctx, x, y, a_square, color, lineThickness) {
     ctx.fillStyle = color;
     ctx.fillRect(x * a_square, y * a_square, a_square, a_square);
     ctx.strokeStyle = "#0f3052";
+    ctx.lineWidth = lineThickness;
     ctx.strokeRect(x * a_square, y * a_square, a_square, a_square);
 }
 
@@ -58,11 +58,11 @@ export function clearPath(ctx, board, squareSize) {
         for (let x = 0; x < HORIZONTAL_SQUARES; x++) {
             // If the square is not a wall, start, or end, clear it
             if (board[y][x] !== 1 && board[y][x] !== 2) {
-                drawRectangle(ctx, x, y, squareSize, "#ffffff");
+                drawRectangle(ctx, x, y, squareSize, "#ffffff", squareSize / 12);
             }
 
             if (board[y][x] === 3) {
-                drawRectangle(ctx, x, y, squareSize, "#ffffff");
+                drawRectangle(ctx, x, y, squareSize, "#ffffff", squareSize / 12);
                 drawEnd(ctx, x, y, squareSize);
             }
         }
@@ -100,14 +100,14 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
             // The square is empty, place a wall
             let newBoard = [...board];
             newBoard[boardY][boardX] = 1;
-            drawRectangle(ctx, boardX, boardY, squareSize, "#0f3052");
+            drawRectangle(ctx, boardX, boardY, squareSize, "#0f3052", squareSize / 12);
             onSetBoard(newBoard);
             setClickedSquare('wall');
         } else if (board[boardY][boardX] === 1) {
             // The square contains a wall, remove it
             let newBoard = [...board];
             newBoard[boardY][boardX] = 0;
-            drawRectangle(ctx, boardX, boardY, squareSize, "#ffffff");
+            drawRectangle(ctx, boardX, boardY, squareSize, "#ffffff", squareSize / 12);
             onSetBoard(newBoard);
             setClickedSquare('empty');
         }
@@ -148,12 +148,12 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
             if (clickedSquare === 'wall' && board[boardY][boardX] !== 1) {
                 let newBoard = [...board];
                 newBoard[boardY][boardX] = 1;
-                drawRectangle(ctx, boardX, boardY, squareSize, "#0f3052");
+                drawRectangle(ctx, boardX, boardY, squareSize, "#0f3052", squareSize / 12);
                 onSetBoard(newBoard);
             } else if (clickedSquare === 'empty' && board[boardY][boardX] !== 0) {
                 let newBoard = [...board];
                 newBoard[boardY][boardX] = 0;
-                drawRectangle(ctx, boardX, boardY, squareSize, "#ffffff");
+                drawRectangle(ctx, boardX, boardY, squareSize, "#ffffff", squareSize / 12);
                 onSetBoard(newBoard);
             }
         }
@@ -189,11 +189,11 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
         for (let i = 0; i < VERTICAL_SQUARES; i++) {
             for (let j = 0; j < HORIZONTAL_SQUARES; j++) {
                 if (board[i][j] === 1) {
-                    drawRectangle(ctx, j, i, squareSize, "#0f3052");
+                    drawRectangle(ctx, j, i, squareSize, "#0f3052", squareSize / 12);
                 }
             }
         }
-    }, [board, start, end]);
+    }, [board, start, end, squareSize]);
 
     // 5. React Effects
     useEffect(() => {
