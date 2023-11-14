@@ -2,7 +2,7 @@ import {visualize} from "../../utils/api";
 import {animateShortestPath, animateVisited} from "../board/animations";
 import "./NavButton.css"
 import {clearPath} from "../board/Board";
-function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end, speed, setMessage, setShowPopup }) {
+function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end, speed, setMessage, setShowPopup, squareSize }) {
     const onButtonClick = async () => {
         const ctx = canvasRef.current.getContext('2d');
         const animationSpeed = parseInt(speed, 10);
@@ -23,14 +23,14 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
                 const result = await visualize(data);
                 const { visited, shortest_path } = result;
 
-                clearPath(ctx, board);
+                clearPath(ctx, board, squareSize);
                 const totalVisitedAnimationDuration = visited.length * animationSpeed;
                 const totalShortestPathAnimationDuration = shortest_path.length * animationSpeed;
                 setIsRunning(true);
-                animateVisited(visited, ctx, start, end, animationSpeed);
+                animateVisited(visited, ctx, start, end, animationSpeed,squareSize);
 
                 setTimeout(() => {
-                    animateShortestPath(shortest_path, ctx, start, end, animationSpeed);
+                    animateShortestPath(shortest_path, ctx, start, end, animationSpeed, squareSize);
 
                     setTimeout(() => {
                         setIsRunning(false);

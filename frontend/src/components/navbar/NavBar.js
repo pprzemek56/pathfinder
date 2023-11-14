@@ -6,7 +6,7 @@ import NavButton from "./NavButton";
 import NavLink from "./NavLink";
 
 
-function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start, end, setMessage, setShowPopup }) {
+function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start, end, setMessage, setShowPopup, squareSize }) {
     const [selectedSpeed, setSelectedSpeed] = useState({ id: '50', label: 'Medium' });
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
 
@@ -52,6 +52,7 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start
                             speed={selectedSpeed?.id}
                             setMessage={setMessage}
                             setShowPopup={setShowPopup}
+                            squareSize={squareSize}
                         />
                         <NavLink id="clear-board" label="Clear Board" onClick={onClearBoard} isRunning={isRunning}/>
                         <NavLink id="about-project" label="About Project" />

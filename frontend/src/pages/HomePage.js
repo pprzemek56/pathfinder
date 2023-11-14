@@ -5,6 +5,7 @@ import Footer from "../components/footer/Footer";
 import Board, { initBoard } from "../components/board/Board";
 import './HomePage.css'
 import Popup from "../components/popup/Popup";
+import {useDynamicSquareSize} from "../components/board/useDynamicSquareSize";
 
 function HomePage() {
     const [start, setStart] = useState({ x: 10, y: 10 });
@@ -14,6 +15,7 @@ function HomePage() {
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState('');
     const canvasRef = useRef(null);
+    const dynamicSquareSize = useDynamicSquareSize();
 
     const handleClosePopup = () => {
         setShowPopup(false);
@@ -50,6 +52,7 @@ function HomePage() {
                 end={end}
                 setMessage={setMessage}
                 setShowPopup={setShowPopup}
+                squareSize={dynamicSquareSize}
             />
             <div className="homePage-content">
                 <div className="board">
@@ -62,6 +65,7 @@ function HomePage() {
                         onSetStart={handleSetStart}
                         onSetEnd={handleSetEnd}
                         isRunning={isRunning}
+                        squareSize={dynamicSquareSize}
                     />
                 </div>
             </div>

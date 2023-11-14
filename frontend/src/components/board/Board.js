@@ -4,7 +4,7 @@ import "./Board.css"
 
 const HORIZONTAL_SQUARES = 53;
 const VERTICAL_SQUARES = 21;
-export const a_square = 24;
+// export const a_square = 24;
 
 export function initBoard(start, end) {
     let array = Array.from({ length: VERTICAL_SQUARES }, () => Array(HORIZONTAL_SQUARES).fill(0));
@@ -53,24 +53,24 @@ export function drawEnd(ctx, x, y, a_square) {
     ctx.fill();
 }
 
-export function clearPath(ctx, board) {
+export function clearPath(ctx, board, squareSize) {
     for (let y = 0; y < VERTICAL_SQUARES; y++) {
         for (let x = 0; x < HORIZONTAL_SQUARES; x++) {
             // If the square is not a wall, start, or end, clear it
             if (board[y][x] !== 1 && board[y][x] !== 2) {
-                drawRectangle(ctx, x, y, a_square, "#ffffff");
+                drawRectangle(ctx, x, y, squareSize, "#ffffff");
             }
 
             if (board[y][x] === 3) {
-                drawRectangle(ctx, x, y, a_square, "#ffffff");
-                drawEnd(ctx, x, y, a_square);
+                drawRectangle(ctx, x, y, squareSize, "#ffffff");
+                drawEnd(ctx, x, y, squareSize);
             }
         }
     }
 }
 
 
-function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning, canvasRef} ) {
+function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning, canvasRef, squareSize} ) {
     const [clickedSquare, setClickedSquare] = useState(null);
 
     // 2. Event Handlers
@@ -80,8 +80,8 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
         const rect = canvasRef.current.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        const boardX = Math.floor(x / a_square);
-        const boardY = Math.floor(y / a_square);
+        const boardX = Math.floor(x / squareSize);
+        const boardY = Math.floor(y / squareSize);
         const ctx = canvasRef.current.getContext('2d');
 
         if (boardX === start.x && boardY === start.y) {
@@ -100,14 +100,14 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
             // The square is empty, place a wall
             let newBoard = [...board];
             newBoard[boardY][boardX] = 1;
-            drawRectangle(ctx, boardX, boardY, a_square, "#0f3052");
+            drawRectangle(ctx, boardX, boardY, squareSize, "#0f3052");
             onSetBoard(newBoard);
             setClickedSquare('wall');
         } else if (board[boardY][boardX] === 1) {
             // The square contains a wall, remove it
             let newBoard = [...board];
             newBoard[boardY][boardX] = 0;
-            drawRectangle(ctx, boardX, boardY, a_square, "#ffffff");
+            drawRectangle(ctx, boardX, boardY, squareSize, "#ffffff");
             onSetBoard(newBoard);
             setClickedSquare('empty');
         }
@@ -121,8 +121,8 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
         const rect = canvasRef.current.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        const boardX = Math.floor(x / a_square);
-        const boardY = Math.floor(y / a_square);
+        const boardX = Math.floor(x / squareSize);
+        const boardY = Math.floor(y / squareSize);
         const ctx = canvasRef.current.getContext('2d');
         const currentBoard = [...board];  // Clone the current board
 
@@ -148,12 +148,12 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
             if (clickedSquare === 'wall' && board[boardY][boardX] !== 1) {
                 let newBoard = [...board];
                 newBoard[boardY][boardX] = 1;
-                drawRectangle(ctx, boardX, boardY, a_square, "#0f3052");
+                drawRectangle(ctx, boardX, boardY, squareSize, "#0f3052");
                 onSetBoard(newBoard);
             } else if (clickedSquare === 'empty' && board[boardY][boardX] !== 0) {
                 let newBoard = [...board];
                 newBoard[boardY][boardX] = 0;
-                drawRectangle(ctx, boardX, boardY, a_square, "#ffffff");
+                drawRectangle(ctx, boardX, boardY, squareSize, "#ffffff");
                 onSetBoard(newBoard);
             }
         }
@@ -165,31 +165,31 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
 
     const createBoard = useCallback((ctx) => {
         ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, HORIZONTAL_SQUARES * a_square, VERTICAL_SQUARES * a_square);
+        ctx.fillRect(0, 0, HORIZONTAL_SQUARES * squareSize, VERTICAL_SQUARES * squareSize);
 
         // Draw horizontal lines
         for(let i = 0; i < VERTICAL_SQUARES + 1; i++){
             ctx.beginPath();
-            ctx.moveTo(0, i * a_square);
-            ctx.lineTo(HORIZONTAL_SQUARES * a_square, i * a_square);
+            ctx.moveTo(0, i * squareSize);
+            ctx.lineTo(HORIZONTAL_SQUARES * squareSize, i * squareSize);
             ctx.stroke();
         }
 
         // Draw vertical lines
         for(let i = 0; i < HORIZONTAL_SQUARES + 1; i++){
             ctx.beginPath();
-            ctx.moveTo(i * a_square, 0);
-            ctx.lineTo(i * a_square, VERTICAL_SQUARES * a_square);
+            ctx.moveTo(i * squareSize, 0);
+            ctx.lineTo(i * squareSize, VERTICAL_SQUARES * squareSize);
             ctx.stroke();
         }
 
-        drawStart(ctx, start.x, start.y, a_square);
-        drawEnd(ctx, end.x, end.y, a_square);
+        drawStart(ctx, start.x, start.y, squareSize);
+        drawEnd(ctx, end.x, end.y, squareSize);
 
         for (let i = 0; i < VERTICAL_SQUARES; i++) {
             for (let j = 0; j < HORIZONTAL_SQUARES; j++) {
                 if (board[i][j] === 1) {
-                    drawRectangle(ctx, j, i, a_square, "#0f3052");
+                    drawRectangle(ctx, j, i, squareSize, "#0f3052");
                 }
             }
         }
@@ -207,8 +207,8 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
         <div className="canvas-container">
             <canvas
                 ref={canvasRef}
-                width={HORIZONTAL_SQUARES * a_square}
-                height={VERTICAL_SQUARES * a_square}
+                width={HORIZONTAL_SQUARES * squareSize}
+                height={VERTICAL_SQUARES * squareSize}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
