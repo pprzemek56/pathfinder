@@ -1,4 +1,4 @@
-import board, {a_square, drawEnd, drawRectangle, drawStart} from "./Board";
+import {a_square, drawEnd, drawRectangle, drawStart} from "./Board";
 
 export const animateVisited = (visited, ctx, start, end, speed) => {
     const visitedSquares = visited.map(node => ({x: node.x, y: node.y}));

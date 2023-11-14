@@ -15,11 +15,6 @@ function HomePage() {
     const [message, setMessage] = useState('');
     const canvasRef = useRef(null);
 
-    const handleShowPopup = (message) => {
-        setMessage(message);
-        setShowPopup(true);
-    };
-
     const handleClosePopup = () => {
         setShowPopup(false);
     };
