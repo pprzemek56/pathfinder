@@ -47,12 +47,11 @@ export function drawEnd(ctx, x, y, a_square) {
 export function clearPath(ctx, board, squareSize) {
     for (let y = 0; y < VERTICAL_SQUARES; y++) {
         for (let x = 0; x < HORIZONTAL_SQUARES; x++) {
-            // If the square is not a wall, start, or end, clear it
-            if (board[y][x] !== 1 && board[y][x] !== 2) {
+            if (board[y][x].type !== 1 && board[y][x].type !== 2) {
                 drawRectangle(ctx, x, y, squareSize, "#ffffff", squareSize / 12);
             }
 
-            if (board[y][x] === 3) {
+            if (board[y][x].type === 3) {
                 drawRectangle(ctx, x, y, squareSize, "#ffffff", squareSize / 12);
                 drawEnd(ctx, x, y, squareSize);
             }
@@ -64,7 +63,6 @@ export function clearPath(ctx, board, squareSize) {
 function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning, canvasRef, squareSize} ) {
     const [clickedSquare, setClickedSquare] = useState(null);
 
-    // 2. Event Handlers
     const handleMouseDown = (event) => {
         if(isRunning) return;
 
@@ -87,17 +85,15 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
             return;
         }
 
-        if (board[boardY][boardX] === 0) {
-            // The square is empty, place a wall
-            let newBoard = [...board];
-            newBoard[boardY][boardX] = 1;
+        if (board[boardY][boardX].type === 0) {
+            let newBoard = board.map(row => row.map(cell => ({ ...cell })));
+            newBoard[boardY][boardX].type = 1;
             drawRectangle(ctx, boardX, boardY, squareSize, "#0f3052", squareSize / 12);
             onSetBoard(newBoard);
             setClickedSquare('wall');
-        } else if (board[boardY][boardX] === 1) {
-            // The square contains a wall, remove it
-            let newBoard = [...board];
-            newBoard[boardY][boardX] = 0;
+        } else if (board[boardY][boardX].type === 1) {
+            let newBoard = board.map(row => row.map(cell => ({ ...cell })));
+            newBoard[boardY][boardX].type = 0;
             drawRectangle(ctx, boardX, boardY, squareSize, "#ffffff", squareSize / 12);
             onSetBoard(newBoard);
             setClickedSquare('empty');
@@ -118,32 +114,32 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
         const currentBoard = [...board];  // Clone the current board
 
         if (clickedSquare === 'start' || clickedSquare === 'end') {
-            if (currentBoard[boardY][boardX] === 0 && (boardX !== end.x || boardY !== end.y) && (boardX !== start.x || boardY !== start.y)) {
+            if (currentBoard[boardY][boardX].type === 0 && (boardX !== end.x || boardY !== end.y) && (boardX !== start.x || boardY !== start.y)) {
                 const newCoord = { x: boardX, y: boardY };
 
                 if (clickedSquare === 'start') {
-                    currentBoard[start.y][start.x] = 0;
-                    currentBoard[boardY][boardX] = 2;
+                    currentBoard[start.y][start.x].type = 0;
+                    currentBoard[boardY][boardX].type = 2;
                     onSetStart(newCoord);
                 } else {
-                    currentBoard[end.y][end.x] = 0;
-                    currentBoard[boardY][boardX] = 3;
+                    currentBoard[end.y][end.x].type = 0;
+                    currentBoard[boardY][boardX].type = 3;
                     onSetEnd(newCoord);
                 }
             }
         } else {
             if ((boardX === start.x && boardY === start.y) || (boardX === end.x && boardY === end.y)) {
-                return;  // Avoiding overwriting start or end
+                return;
             }
 
-            if (clickedSquare === 'wall' && board[boardY][boardX] !== 1) {
+            if (clickedSquare === 'wall' && board[boardY][boardX].type !== 1) {
                 let newBoard = [...board];
-                newBoard[boardY][boardX] = 1;
+                newBoard[boardY][boardX].type = 1;
                 drawRectangle(ctx, boardX, boardY, squareSize, "#0f3052", squareSize / 12);
                 onSetBoard(newBoard);
-            } else if (clickedSquare === 'empty' && board[boardY][boardX] !== 0) {
+            } else if (clickedSquare === 'empty' && board[boardY][boardX].type !== 0) {
                 let newBoard = [...board];
-                newBoard[boardY][boardX] = 0;
+                newBoard[boardY][boardX].type = 0;
                 drawRectangle(ctx, boardX, boardY, squareSize, "#ffffff", squareSize / 12);
                 onSetBoard(newBoard);
             }
@@ -151,14 +147,13 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
     }
 
     const handleMouseUp = () => {
-        setClickedSquare(null);  // Reset the clicked square state
+        setClickedSquare(null);
     }
 
     const createBoard = useCallback((ctx) => {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, HORIZONTAL_SQUARES * squareSize, VERTICAL_SQUARES * squareSize);
 
-        // Draw horizontal lines
         for(let i = 0; i < VERTICAL_SQUARES + 1; i++){
             ctx.beginPath();
             ctx.moveTo(0, i * squareSize);
@@ -166,7 +161,6 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
             ctx.stroke();
         }
 
-        // Draw vertical lines
         for(let i = 0; i < HORIZONTAL_SQUARES + 1; i++){
             ctx.beginPath();
             ctx.moveTo(i * squareSize, 0);
@@ -179,14 +173,13 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
 
         for (let i = 0; i < VERTICAL_SQUARES; i++) {
             for (let j = 0; j < HORIZONTAL_SQUARES; j++) {
-                if (board[i][j] === 1) {
+                if (board[i][j].type === 1) {
                     drawRectangle(ctx, j, i, squareSize, "#0f3052", squareSize / 12);
                 }
             }
         }
     }, [board, start, end, squareSize]);
 
-    // 5. React Effects
     useEffect(() => {
         const ctx = canvasRef.current.getContext('2d');
         clearPath(ctx, board);

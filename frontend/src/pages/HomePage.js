@@ -44,9 +44,13 @@ function HomePage() {
     };
 
     function initBoard(start, end) {
-        let array = Array.from({ length: VERTICAL_SQUARES }, () => Array(HORIZONTAL_SQUARES).fill(0));
-        array[start.y][start.x] = 2;
-        array[end.y][end.x] = 3;
+        let array = Array.from({ length: VERTICAL_SQUARES }, () =>
+            Array.from({ length: HORIZONTAL_SQUARES }, () => ({ type: 0, weight: 1 }))
+        );
+
+        array[start.y][start.x] = { type: 2, weight: 1 };
+        array[end.y][end.x] = { type: 3, weight: 1 };
+
         return array;
     }
 
