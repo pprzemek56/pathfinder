@@ -3,6 +3,14 @@ from collections import deque
 from .models import Board
 
 
+def djikstras_algorithm(board: Board):
+    start, end = board.find_start_end()
+    visited = []
+    visited_set = set()
+    stack = [(start, None)]
+    parents = {}
+
+
 def dfs_algorithm(board: Board):
     start, end = board.find_start_end()
     visited = []
@@ -47,7 +55,6 @@ def bfs_algorithm(board: Board):
     start, end = board.find_start_end()
     visited = []
     visited_set = set()
-    shortest_path = []
     queue = deque([(start, None)])  # Use tuples for nodes
     parents = {}  # Keep track of parent nodes
 
