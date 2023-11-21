@@ -20,7 +20,7 @@ class PathSerializer(serializers.Serializer):
 class BoardSerializer(serializers.Serializer):
     board = serializers.ListField(
         child=serializers.ListField(
-            child=serializers.IntegerField()
+            child=serializers.DictField()
         )
     )
     algorithm = serializers.CharField(max_length=200)

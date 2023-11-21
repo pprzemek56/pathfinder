@@ -41,12 +41,11 @@ def dfs_algorithm(board: Board):
         # find available neighbors
         for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
             nx, ny = x + dx, y + dy
-            if 0 <= ny < len(board.board) \
-                    and 0 <= nx < len(board.board[0]) \
-                    and (board.board[ny][nx] == 0 or board.board[ny][nx] == 3) \
-                    and (nx, ny) not in visited_set:
-                stack.append(({"x": nx, "y": ny}, node))
-                visited_set.add((nx, ny))
+            if 0 <= ny < len(board.board) and 0 <= nx < len(board.board[0]):
+                neighbor_node = board.board[ny][nx]
+                if neighbor_node['type'] in [0, 3] and (nx, ny) not in visited_set:
+                    stack.append(({"x": nx, "y": ny}, node))
+                    visited_set.add((nx, ny))
 
     return None, None
 
@@ -80,11 +79,10 @@ def bfs_algorithm(board: Board):
 
         for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
             nx, ny = x + dx, y + dy
-            if 0 <= ny < len(board.board) \
-                    and 0 <= nx < len(board.board[0]) \
-                    and (board.board[ny][nx] == 0 or board.board[ny][nx] == 3) \
-                    and (nx, ny) not in visited_set:  # Check tuple in visited
-                queue.append(({"x": nx, "y": ny}, node))  # Add the node as the parent of the new node
-                visited_set.add((nx, ny))
+            if 0 <= ny < len(board.board) and 0 <= nx < len(board.board[0]):
+                next_node = board.board[ny][nx]
+                if (next_node['type'] in [0, 3]) and (nx, ny) not in visited_set:
+                    queue.append(({"x": nx, "y": ny}, node))
+                    visited_set.add((nx, ny))
 
     return None, None

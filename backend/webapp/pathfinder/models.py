@@ -1,5 +1,5 @@
 class Board:
-    def __init__(self, board: list[list[int]], algorithm):
+    def __init__(self, board: list[list[dict]], algorithm):
         self.board = board
         self.algorithm = algorithm
 
@@ -27,9 +27,9 @@ class Board:
         end = None
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
-                if self.board[i][j] == 2:
+                if self.board[i][j]["type"] == 2:
                     start = {"x": j, "y": i}
-                elif self.board[i][j] == 3:
+                elif self.board[i][j]["type"] == 3:
                     end = {"x": j, "y": i}
 
                 if start and end:
