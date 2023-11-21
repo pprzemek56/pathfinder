@@ -1,11 +1,14 @@
 import React, {useRef, useState} from 'react';
 
+import './HomePage.css'
 import NavBar from "../components/navbar/NavBar";
 import Footer from "../components/footer/Footer";
-import Board, { initBoard } from "../components/board/Board";
-import './HomePage.css'
 import Popup from "../components/popup/Popup";
-import {UseDynamicSquareSize} from "../components/board/UseDynamicSquareSize";
+import Board from "../components/board/Board";
+import { UseDynamicSquareSize } from "../components/board/UseDynamicSquareSize";
+
+export const HORIZONTAL_SQUARES = 53;
+export const VERTICAL_SQUARES = 21;
 
 function HomePage() {
     const [start, setStart] = useState({ x: 10, y: 10 });
@@ -39,6 +42,13 @@ function HomePage() {
     const handleSetEnd = (newEnd) => {
         setEnd(newEnd);
     };
+
+    function initBoard(start, end) {
+        let array = Array.from({ length: VERTICAL_SQUARES }, () => Array(HORIZONTAL_SQUARES).fill(0));
+        array[start.y][start.x] = 2;
+        array[end.y][end.x] = 3;
+        return array;
+    }
 
     return (
         <div className='homePage'>

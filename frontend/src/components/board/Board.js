@@ -1,16 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 
 import "./Board.css"
-
-const HORIZONTAL_SQUARES = 53;
-const VERTICAL_SQUARES = 21;
-
-export function initBoard(start, end) {
-    let array = Array.from({ length: VERTICAL_SQUARES }, () => Array(HORIZONTAL_SQUARES).fill(0));
-    array[start.y][start.x] = 2;
-    array[end.y][end.x] = 3;
-    return array;
-}
+import {HORIZONTAL_SQUARES, VERTICAL_SQUARES} from "../../pages/HomePage";
 
 export function drawRectangle(ctx, x, y, a_square, color, lineThickness) {
     ctx.fillStyle = color;
