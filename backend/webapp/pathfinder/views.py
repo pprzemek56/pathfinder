@@ -23,6 +23,8 @@ def visualize(request: Request):
         visited, shortest_path = algorithms.dfs_algorithm(board)
     elif board.algorithm == "bfs":
         visited, shortest_path = algorithms.bfs_algorithm(board)
+    elif board.algorithm == "dijkstras":
+        visited, shortest_path = algorithms.djikstras_algorithm(board)
 
     path_serializer = PathSerializer(data={"visited": visited, "shortest_path": shortest_path})
     if path_serializer.is_valid():
