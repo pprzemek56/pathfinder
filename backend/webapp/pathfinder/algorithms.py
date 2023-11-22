@@ -10,16 +10,17 @@ def djikstras_algorithm(board: Board):
     # Initialize distances with infinity
     distances = {(i, j): float('infinity') for i in range(len(board.board)) for j in range(len(board.board[0]))}
     distances[(start['y'], start['x'])] = 0
+    node_map = {(i, j): {"x": j, "y": i} for i in range(len(board.board)) for j in range(len(board.board[0]))}
 
-    # Priority queue: (distance, node)
-    priority_queue = [(0, start)]
+    # Priority queue: (distance, (x, y))
+    priority_queue = [(0, (start['y'], start['x']))]
     parents = {}
     visited = []
     path_found = False
 
     while priority_queue:
-        current_distance, current_node = heapq.heappop(priority_queue)
-        cx, cy = current_node['x'], current_node['y']
+        current_distance, (cy, cx) = heapq.heappop(priority_queue)
+        current_node = node_map[(cy, cx)]
 
         # Mark the node as visited
         if current_node not in visited:
@@ -39,7 +40,7 @@ def djikstras_algorithm(board: Board):
                     new_distance = current_distance + neighbor_node['weight']
                     if new_distance < distances[(ny, nx)]:
                         distances[(ny, nx)] = new_distance
-                        heapq.heappush(priority_queue, (new_distance, {'x': nx, 'y': ny}))
+                        heapq.heappush(priority_queue, (new_distance, (ny, nx)))
                         parents[(nx, ny)] = current_node
 
     if not path_found:

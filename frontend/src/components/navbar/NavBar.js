@@ -18,7 +18,8 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start
 
     const algorithmItems = [
         { id: 'dfs', label: 'DFS Search' },
-        { id: 'bfs', label: 'BFS Search' }
+        { id: 'bfs', label: 'BFS Search' },
+        { id: 'dijkstras', label: "Dijkstra's Algorithm" }
     ];
 
     return (
