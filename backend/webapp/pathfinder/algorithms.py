@@ -1,4 +1,5 @@
 import heapq
+import itertools
 from collections import deque
 
 from .models import Board
@@ -17,14 +18,14 @@ def a_star_algorithm(board: Board):
     distances = {(i, j): float('infinity') for i in range(len(board.board)) for j in range(len(board.board[0]))}
     distances[(start['y'], start['x'])] = 0
 
-    # Priority queue: (cost + heuristic, cost, node)
-    priority_queue = [(heuristic(start), 0, start)]
+    priority_queue = [(heuristic(start), 0, 0, start)]
     parents = {}
     visited = []
     path_found = False
+    sequence_number = itertools.count()
 
     while priority_queue:
-        _, current_cost, current_node = heapq.heappop(priority_queue)
+        _, _, current_cost, current_node = heapq.heappop(priority_queue)
         cx, cy = current_node['x'], current_node['y']
 
         # Mark the node as visited
@@ -46,7 +47,7 @@ def a_star_algorithm(board: Board):
                     if new_cost < distances[(ny, nx)]:
                         distances[(ny, nx)] = new_cost
                         total_cost = new_cost + heuristic({'x': nx, 'y': ny})
-                        heapq.heappush(priority_queue, (total_cost, new_cost, {'x': nx, 'y': ny}))
+                        heapq.heappush(priority_queue, (total_cost, next(sequence_number), new_cost, {'x': nx, 'y': ny}))
                         parents[(nx, ny)] = current_node
 
     # Check if path found
