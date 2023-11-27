@@ -9,12 +9,55 @@ def manhattan_distance(start, end):
     return abs(start['x'] - end['x']) + abs(start['y'] - end['y'])
 
 
-def a_star_algorithm(board: Board):
+def greedy_best_first_search(board: Board):
     start, end = board.find_start_end()
-    # Heuristic function - Manhattan distance
     heuristic = lambda node: manhattan_distance(node, end)
 
-    # Initialize distances with infinity
+    visited = []
+    path_found = False
+    parents = {}
+    sequence_number = itertools.count()
+
+    priority_queue = [(heuristic(start), next(sequence_number), start)]
+
+    while priority_queue:
+        _, _, current_node = heapq.heappop(priority_queue)
+        cx, cy = current_node['x'], current_node['y']
+
+        if current_node not in visited:
+            visited.append(current_node)
+
+        if current_node == end:
+            path_found = True
+            break
+
+        for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
+            nx, ny = cx + dx, cy + dy
+            if 0 <= ny < len(board.board) and 0 <= nx < len(board.board[0]):
+                neighbor_node = board.board[ny][nx]
+                if neighbor_node['type'] != 1:
+                    if {'x': nx, 'y': ny} not in visited:
+                        heapq.heappush(priority_queue, (heuristic({'x': nx, 'y': ny}), next(sequence_number), {'x': nx, 'y': ny}))
+                        parents[(nx, ny)] = current_node
+
+    if not path_found:
+        return None, None
+
+    shortest_path = []
+    current = end
+    while current != start:
+        shortest_path.append(current)
+        current = parents.get((current['x'], current['y']), start)
+    shortest_path.append(start)
+    shortest_path.reverse()
+
+    return visited, shortest_path
+
+
+def a_star_algorithm(board: Board):
+    start, end = board.find_start_end()
+    heuristic = lambda node: manhattan_distance(node, end)
+
     distances = {(i, j): float('infinity') for i in range(len(board.board)) for j in range(len(board.board[0]))}
     distances[(start['y'], start['x'])] = 0
 
@@ -28,16 +71,13 @@ def a_star_algorithm(board: Board):
         _, _, current_cost, current_node = heapq.heappop(priority_queue)
         cx, cy = current_node['x'], current_node['y']
 
-        # Mark the node as visited
         if current_node not in visited:
             visited.append(current_node)
 
-        # Stop if we reach the end node
         if current_node == end:
             path_found = True
             break
 
-        # Check all neighbors
         for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
             nx, ny = cx + dx, cy + dy
             if 0 <= ny < len(board.board) and 0 <= nx < len(board.board[0]):
@@ -47,14 +87,13 @@ def a_star_algorithm(board: Board):
                     if new_cost < distances[(ny, nx)]:
                         distances[(ny, nx)] = new_cost
                         total_cost = new_cost + heuristic({'x': nx, 'y': ny})
-                        heapq.heappush(priority_queue, (total_cost, next(sequence_number), new_cost, {'x': nx, 'y': ny}))
+                        heapq.heappush(priority_queue,
+                                       (total_cost, next(sequence_number), new_cost, {'x': nx, 'y': ny}))
                         parents[(nx, ny)] = current_node
 
-    # Check if path found
     if not path_found:
         return None, None
 
-    # Construct the shortest path
     shortest_path = []
     current = end
     while current != start:
@@ -69,12 +108,10 @@ def a_star_algorithm(board: Board):
 def djikstras_algorithm(board: Board):
     start, end = board.find_start_end()
 
-    # Initialize distances with infinity
     distances = {(i, j): float('infinity') for i in range(len(board.board)) for j in range(len(board.board[0]))}
     distances[(start['y'], start['x'])] = 0
     node_map = {(i, j): {"x": j, "y": i} for i in range(len(board.board)) for j in range(len(board.board[0]))}
 
-    # Priority queue: (distance, (x, y))
     priority_queue = [(0, (start['y'], start['x']))]
     parents = {}
     visited = []
@@ -84,21 +121,18 @@ def djikstras_algorithm(board: Board):
         current_distance, (cy, cx) = heapq.heappop(priority_queue)
         current_node = node_map[(cy, cx)]
 
-        # Mark the node as visited
         if current_node not in visited:
             visited.append(current_node)
 
-        # Stop if we reach the end node
         if current_node == end:
             path_found = True
             break
 
-        # Check all neighbors
         for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
             nx, ny = cx + dx, cy + dy
             if 0 <= ny < len(board.board) and 0 <= nx < len(board.board[0]):
                 neighbor_node = board.board[ny][nx]
-                if neighbor_node['type'] != 1:  # Skip walls
+                if neighbor_node['type'] != 1:
                     new_distance = current_distance + neighbor_node['weight']
                     if new_distance < distances[(ny, nx)]:
                         distances[(ny, nx)] = new_distance
@@ -108,7 +142,6 @@ def djikstras_algorithm(board: Board):
     if not path_found:
         return None, None
 
-    # Construct the shortest path
     shortest_path = []
     current = end
     while current != start:
@@ -124,30 +157,27 @@ def dfs_algorithm(board: Board):
     start, end = board.find_start_end()
     visited = []
     visited_set = set()
-    stack = [(start, None)]  # store each node along with its parent in the stack
-    parents = {}  # store the parent of each visited node
+    stack = [(start, None)]
+    parents = {}
 
     while stack:
         node, parent = stack.pop()
         visited.append(node)
         visited_set.add((node["x"], node["y"]))
 
-        # set the parent of the current node
         x, y = node.get("x"), node.get("y")
         parents[(x, y)] = parent
 
         if node == end:
-            # retrace the path from the end node back to the start node using the parents dictionary
             shortest_path = []
             current = node
             while current is not None:
                 x, y = current.get("x"), current.get("y")
                 shortest_path.append(current)
                 current = parents.get((x, y))
-            shortest_path.reverse()  # reverse the path to get the correct order
+            shortest_path.reverse()
             return visited, shortest_path
 
-        # find available neighbors
         for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
             nx, ny = x + dx, y + dy
             if 0 <= ny < len(board.board) and 0 <= nx < len(board.board[0]):
@@ -163,27 +193,25 @@ def bfs_algorithm(board: Board):
     start, end = board.find_start_end()
     visited = []
     visited_set = set()
-    queue = deque([(start, None)])  # Use tuples for nodes
-    parents = {}  # Keep track of parent nodes
+    queue = deque([(start, None)])
+    parents = {}
 
     while queue:
-        node, parent = queue.popleft()  # Unpack the node and its parent
+        node, parent = queue.popleft()
         visited.append(node)
         visited_set.add((node["x"], node["y"]))
 
-        # set the parent of the current node
         x, y = node.get("x"), node.get("y")
         parents[(x, y)] = parent
 
-        if node == end:  # Compare tuples
-            # Reconstruct the shortest path using parents dictionary
+        if node == end:
             shortest_path = []
             current = node
             while current is not None:
                 x, y = current.get("x"), current.get("y")
                 shortest_path.append(current)
                 current = parents.get((x, y))
-            shortest_path.reverse()  # Reverse the path to get the correct order
+            shortest_path.reverse()
             return visited, shortest_path
 
         for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
