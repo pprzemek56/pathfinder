@@ -1,6 +1,8 @@
+import time
 import heapq
 import itertools
 from collections import deque
+from multiprocessing import Process, Queue
 
 from .models import Board
 
@@ -12,6 +14,7 @@ def manhattan_distance(start, end):
 def greedy_best_first_search(board: Board):
     start, end = board.find_start_end()
     heuristic = lambda node: manhattan_distance(node, end)
+    start_time = time.time()
 
     visited = []
     path_found = False
@@ -21,6 +24,8 @@ def greedy_best_first_search(board: Board):
     priority_queue = [(heuristic(start), next(sequence_number), start)]
 
     while priority_queue:
+        if time.time() - start_time > 1.0:
+            return None, None
         _, _, current_node = heapq.heappop(priority_queue)
         cx, cy = current_node['x'], current_node['y']
 
@@ -37,7 +42,8 @@ def greedy_best_first_search(board: Board):
                 neighbor_node = board.board[ny][nx]
                 if neighbor_node['type'] != 1:
                     if {'x': nx, 'y': ny} not in visited:
-                        heapq.heappush(priority_queue, (heuristic({'x': nx, 'y': ny}), next(sequence_number), {'x': nx, 'y': ny}))
+                        heapq.heappush(priority_queue,
+                                       (heuristic({'x': nx, 'y': ny}), next(sequence_number), {'x': nx, 'y': ny}))
                         parents[(nx, ny)] = current_node
 
     if not path_found:
