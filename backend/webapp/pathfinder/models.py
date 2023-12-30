@@ -36,6 +36,64 @@ class Board:
                     return start, end
 
 
+class Node:
+    def __int__(self, x, y, node_type, neighbors, weight=1):
+        self.x = x
+        self.y = y
+        self.node_type = node_type
+        self.neighbors = neighbors
+        self.weight = weight
+        self.distance = float('infinity')
+        self.parent = None
+
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, x):
+        self._x = x
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, y):
+        self._y = y
+
+    @property
+    def node_type(self):
+        return self._node_type
+
+    @node_type.setter
+    def node_type(self, node_type):
+        self._node_type = node_type
+
+    @property
+    def neighbors(self):
+        return self._neighbors
+
+    @neighbors.setter
+    def neighbors(self, neighbors):
+        self._neighbors = neighbors
+
+    @property
+    def weight(self):
+        return self._weight
+
+    @weight.setter
+    def weight(self, weight):
+        self._weight = weight
+
+    def is_walkable(self):
+        return self.type != 1
+
+    def reset_state(self):
+        self.distance = float('infinity')
+        self.parent = None
+
+
 class Path:
     def __init__(self, visited, shortest_path):
         self.visited = visited
