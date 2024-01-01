@@ -1,41 +1,3 @@
-class Board:
-    def __init__(self, board: list[list[dict]], algorithm):
-        self.board = board
-        self.algorithm = algorithm
-
-    def __str__(self):
-        return f"algorithm: {self.algorithm}"
-
-    @property
-    def board(self):
-        return self._board
-
-    @board.setter
-    def board(self, board):
-        self._board = board
-
-    @property
-    def algorithm(self):
-        return self._algorithm
-
-    @algorithm.setter
-    def algorithm(self, algorithm):
-        self._algorithm = algorithm
-
-    def find_start_end(self):
-        start = None
-        end = None
-        for i in range(len(self.board)):
-            for j in range(len(self.board[i])):
-                if self.board[i][j]["type"] == 2:
-                    start = {"x": j, "y": i}
-                elif self.board[i][j]["type"] == 3:
-                    end = {"x": j, "y": i}
-
-                if start and end:
-                    return start, end
-
-
 class Node:
     def __int__(self, x, y, node_type, neighbors, weight=1):
         self.x = x
@@ -92,6 +54,42 @@ class Node:
     def reset_state(self):
         self.distance = float('infinity')
         self.parent = None
+
+
+class Board:
+    def __init__(self, nodes, algorithm):
+        self.nodes = nodes
+        self.algorithm = algorithm
+
+    def __str__(self):
+        return f"algorithm: {self.algorithm}"
+
+    @property
+    def nodes(self):
+        return self._nodes
+
+    @nodes.setter
+    def nodes(self, nodes):
+        self._nodes = nodes
+
+    @property
+    def algorithm(self):
+        return self._algorithm
+
+    @algorithm.setter
+    def algorithm(self, algorithm):
+        self._algorithm = algorithm
+
+    def find_start_end(self):
+        start, end = None, None
+        for node in self.nodes:
+            if node.node_type == 2:
+                start = node
+            if node.node_type == 3:
+                end = node
+            if start and end:
+                return start, end
+        return start, end
 
 
 class Path:
