@@ -1,5 +1,5 @@
 class Board:
-    def __init__(self, board: list[list[dict]]):
+    def __init__(self, board: list[list[dict]], algorithm):
         self.board = board
         self.algorithm = algorithm
 
