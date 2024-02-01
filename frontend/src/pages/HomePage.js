@@ -6,6 +6,7 @@ import Footer from "../components/footer/Footer";
 import Popup from "../components/popup/Popup";
 import Board from "../components/board/Board";
 import { UseDynamicSquareSize } from "../components/board/UseDynamicSquareSize";
+import AlgorithmPseudocode from "../components/pseudocode/AlgorithmPseudocode";
 
 export const HORIZONTAL_SQUARES = 53;
 export const VERTICAL_SQUARES = 21;
@@ -19,6 +20,7 @@ function HomePage() {
     const [message, setMessage] = useState('');
     const canvasRef = useRef(null);
     const dynamicSquareSize = UseDynamicSquareSize();
+    const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
 
     const handleClosePopup = () => {
         setShowPopup(false);
@@ -67,9 +69,11 @@ function HomePage() {
                 setMessage={setMessage}
                 setShowPopup={setShowPopup}
                 squareSize={dynamicSquareSize}
+                selectedAlgorithm={selectedAlgorithm}
+                setSelectedAlgorithm={setSelectedAlgorithm}
             />
             <div className="homePage-content">
-                <div className="board">
+                <div className="homePage-conatainer">
                     <Board
                         canvasRef={canvasRef}
                         board={board}
@@ -81,6 +85,9 @@ function HomePage() {
                         isRunning={isRunning}
                         squareSize={dynamicSquareSize}
                     />
+                    {isRunning &&
+                      <AlgorithmPseudocode algorithm={selectedAlgorithm} />
+                    }
                 </div>
             </div>
             <Footer />
