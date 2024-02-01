@@ -110,6 +110,13 @@ function Board( {board, start, end, onSetBoard, onSetStart, onSetEnd, isRunning,
         const y = event.clientY - rect.top;
         const boardX = Math.floor(x / squareSize);
         const boardY = Math.floor(y / squareSize);
+
+        // Check if the mouse is within the bounds of the board
+        if (boardY < 0 || boardY >= board.length || boardX < 0 || boardX >= board[boardY].length) {
+            // Mouse is outside the board, so do nothing
+            return;
+        }
+
         const ctx = canvasRef.current.getContext('2d');
         const currentBoard = [...board];  // Clone the current board
 
