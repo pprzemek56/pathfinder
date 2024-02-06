@@ -1,10 +1,19 @@
 import {HORIZONTAL_SQUARES, VERTICAL_SQUARES} from "../pages/HomePage";
 
 export function generateRandomPattern(board) {
-    return board.map(row =>
+    // Reset the board to initial state first, but preserve start (type = 2) and end (type = 3) squares
+    const resetBoard = board.map(row =>
         row.map(cell => ({
             ...cell,
-            type: Math.random() < 0.3 && cell.type === 0 ? 1 : cell.type
+            type: cell.type === 2 || cell.type === 3 ? cell.type : 0, // Preserve start and end squares
+        }))
+    );
+
+    // Now, apply random pattern, still preserving start and end squares
+    return resetBoard.map(row =>
+        row.map(cell => ({
+            ...cell,
+            type: (cell.type === 0 && Math.random() < 0.3) ? 1 : cell.type,
         }))
     );
 }
