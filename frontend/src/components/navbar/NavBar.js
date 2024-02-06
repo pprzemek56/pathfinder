@@ -8,11 +8,17 @@ import NavLink from "./NavLink";
 
 function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start, end, setMessage, setShowPopup, squareSize, selectedAlgorithm, setSelectedAlgorithm }) {
     const [selectedSpeed, setSelectedSpeed] = useState({ id: '50', label: 'Medium' });
+    const [selectedPattern, setSelectedPattern] = useState();
+
+    const patternItems = [
+        {id: 'random', label: 'Random Pattern'},
+        {id: 'maze', label: 'Maze Pattern'},
+    ]
 
     const speedItems = [
         {id: '10', label: 'Fast'},
         {id: '50', label: 'Medium'},
-        {id: '250', label: 'Slow'}
+        {id: '250', label: 'Slow'},
     ]
 
     const algorithmItems = [
@@ -20,7 +26,7 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start
         { id: 'bfs', label: 'BFS Algorithm' },
         { id: 'dijkstras', label: "Dijkstra's Algorithm" },
         { id: 'a_star', label: "A* Algorithm" },
-        { id: 'greedy_bfs', label: "Greedy BFS Algorithm" }
+        { id: 'greedy_bfs', label: "Greedy BFS Algorithm" },
     ];
 
     return (
@@ -57,7 +63,13 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start
                             squareSize={squareSize}
                         />
                         <NavLink id="clear-board" label="Clear Board" onClick={onClearBoard} isRunning={isRunning}/>
-                        <NavLink id="about-project" label="About Project" />
+                        <Dropdown
+                            id="patterns"
+                            label="Example Patterns"
+                            items={patternItems}
+                            selectedItem={selectedPattern}
+                            onSelectItem={setSelectedPattern}
+                        />
                     </ul>
                 </div>
             </div>
