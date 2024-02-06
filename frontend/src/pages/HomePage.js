@@ -21,6 +21,7 @@ function HomePage() {
     const canvasRef = useRef(null);
     const dynamicSquareSize = UseDynamicSquareSize();
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
+    const [selectedPattern, setSelectedPattern] = useState(null);
 
     const handleClosePopup = () => {
         setShowPopup(false);
@@ -31,6 +32,7 @@ function HomePage() {
 
         const newBoard = initBoard(start, end);
         setBoard(newBoard);
+        setSelectedPattern(null);
     };
 
     const handleSetBoard = (newBoard) => {
@@ -64,6 +66,7 @@ function HomePage() {
                 isRunning={isRunning}
                 setIsRunning={setIsRunning}
                 board={board}
+                setBoard={setBoard}
                 start={start}
                 end={end}
                 setMessage={setMessage}
@@ -71,6 +74,8 @@ function HomePage() {
                 squareSize={dynamicSquareSize}
                 selectedAlgorithm={selectedAlgorithm}
                 setSelectedAlgorithm={setSelectedAlgorithm}
+                selectedPattern={selectedPattern}
+                setSelectedPattern={setSelectedPattern}
             />
             <div className="homePage-content">
                 <div className="homePage-conatainer">

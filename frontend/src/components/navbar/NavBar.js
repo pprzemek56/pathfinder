@@ -4,11 +4,11 @@ import './NavBar.css';
 import Dropdown from "./Dropdown";
 import NavButton from "./NavButton";
 import NavLink from "./NavLink";
+import {generateMazePattern, generateRandomPattern} from "../../utils/example_patterns";
 
 
-function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start, end, setMessage, setShowPopup, squareSize, selectedAlgorithm, setSelectedAlgorithm }) {
+function NavBar({ onClearBoard, isRunning, setIsRunning, board, setBoard, canvasRef, start, end, setMessage, setShowPopup, squareSize, selectedAlgorithm, setSelectedAlgorithm, selectedPattern, setSelectedPattern }) {
     const [selectedSpeed, setSelectedSpeed] = useState({ id: '50', label: 'Medium' });
-    const [selectedPattern, setSelectedPattern] = useState();
 
     const patternItems = [
         {id: 'random', label: 'Random Pattern'},
@@ -28,6 +28,25 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start
         { id: 'a_star', label: "A* Algorithm" },
         { id: 'greedy_bfs', label: "Greedy BFS Algorithm" },
     ];
+
+    const handleSelectPattern = (item) => {
+        if (isRunning) return;
+
+        let newBoard;
+        switch (item.id) {
+            case 'random':
+                newBoard = generateRandomPattern(board);
+                break;
+            case 'maze':
+                newBoard = generateMazePattern(board);
+                break;
+            default:
+                return;
+        }
+
+        setSelectedPattern(item);
+        setBoard(newBoard);
+    };
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -68,7 +87,7 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, canvasRef, start
                             label="Example Patterns"
                             items={patternItems}
                             selectedItem={selectedPattern}
-                            onSelectItem={setSelectedPattern}
+                            onSelectItem={item => handleSelectPattern(item)}
                         />
                     </ul>
                 </div>
