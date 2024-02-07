@@ -1,15 +1,11 @@
-import {HORIZONTAL_SQUARES, VERTICAL_SQUARES} from "../pages/HomePage";
-
 export function generateRandomPattern(board) {
-    // Reset the board to initial state first, but preserve start (type = 2) and end (type = 3) squares
     const resetBoard = board.map(row =>
         row.map(cell => ({
             ...cell,
-            type: cell.type === 2 || cell.type === 3 ? cell.type : 0, // Preserve start and end squares
+            type: cell.type === 2 || cell.type === 3 ? cell.type : 0,
         }))
     );
 
-    // Now, apply random pattern, still preserving start and end squares
     return resetBoard.map(row =>
         row.map(cell => ({
             ...cell,
@@ -19,21 +15,40 @@ export function generateRandomPattern(board) {
 }
 
 export function generateMazePattern(board) {
-    // Initialize all cells to walls except start and end
-    let maze = board.map((row, y) => row.map((cell, x) => ({
+    const HORIZONTAL_SQUARES = board[0].length;
+    const VERTICAL_SQUARES = board.length;
+
+    function addCellAndItsWalls(x, y, maze, walls) {
+        maze[y][x].type = 0;
+        [[0, -1], [1, 0], [0, 1], [-1, 0]].forEach(([dx, dy]) => {
+            const nx = x + dx, ny = y + dy;
+            if (nx >= 0 && nx < HORIZONTAL_SQUARES && ny >= 0 && ny < VERTICAL_SQUARES && maze[ny][nx].type === 1) {
+                walls.push({x: nx, y: ny, dx: dx, dy: dy});
+            }
+        });
+    }
+
+    let maze = board.map(row => row.map(cell => ({
         ...cell,
         type: (cell.type === 2 || cell.type === 3) ? cell.type : 1
     })));
 
-    // Define start point for maze generation (could be random or fixed)
+    let walls = [];
     let startX = Math.floor(Math.random() * HORIZONTAL_SQUARES);
     let startY = Math.floor(Math.random() * VERTICAL_SQUARES);
-    if (maze[startY][startX].type !== 2 && maze[startY][startX].type !== 3) {
-        maze[startY][startX].type = 0; // Set to empty to start carving the maze
-    }
+    addCellAndItsWalls(startX, startY, maze, walls);
 
-    // Implementation of Prim's algorithm goes here
-    // Note: This is a placeholder for the actual maze generation logic
+    while (walls.length > 0) {
+        let wallIndex = Math.floor(Math.random() * walls.length);
+        let {x, y, dx, dy} = walls[wallIndex];
+        walls.splice(wallIndex, 1);
+
+        let nx = x + dx, ny = y + dy;
+        if (nx >= 0 && nx < HORIZONTAL_SQUARES && ny >= 0 && ny < VERTICAL_SQUARES && maze[ny][nx].type === 1) {
+            maze[y][x].type = 0;
+            addCellAndItsWalls(nx, ny, maze, walls);
+        }
+    }
 
     return maze;
 }
