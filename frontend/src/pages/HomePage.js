@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import './HomePage.css'
 import NavBar from "../components/navbar/NavBar";
@@ -22,6 +22,8 @@ function HomePage() {
     const dynamicSquareSize = UseDynamicSquareSize();
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
     const [selectedPattern, setSelectedPattern] = useState(null);
+    const [currentNodes, setCurrentNodes] = useState([]);
+    const [pseudocode, setPseudocode] = useState('');
 
     const handleClosePopup = () => {
         setShowPopup(false);
@@ -58,6 +60,35 @@ function HomePage() {
         return array;
     }
 
+    useEffect(() => {
+      const websocket = new WebSocket('ws://localhost:8000/ws/visualize/');
+
+      websocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        // Assuming 'message' contains the event type and details
+        const message = JSON.parse(data.message);
+        switch (message.event) {
+          case 'Node Visitation':
+          case 'Neighbor Evaluation':
+          case 'Path Discovery':
+            // Handle node updates for visualization
+            // Possibly update a state that tracks the current nodes being processed
+            break;
+          case 'Algorithm Initialization':
+          case 'Algorithm Completion':
+            // Handle algorithm start/end messages
+            // Update pseudocode or display completion message
+            break;
+          default:
+            console.log('Unhandled message type:', message.event);
+        }
+      };
+
+      return () => {
+        websocket.close();
+      };
+    }, []);
+
     return (
         <div className='homePage'>
             <NavBar
@@ -89,9 +120,15 @@ function HomePage() {
                         onSetEnd={handleSetEnd}
                         isRunning={isRunning}
                         squareSize={dynamicSquareSize}
+                        currentNodes={currentNodes}
+                        pseudocode={pseudocode}
                     />
                     {isRunning &&
-                      <AlgorithmPseudocode algorithm={selectedAlgorithm} />
+                      <AlgorithmPseudocode
+                          algorithm={selectedAlgorithm}
+                          currentNodes={currentNodes}
+                          pseudocode={pseudocode}
+                      />
                     }
                 </div>
             </div>
