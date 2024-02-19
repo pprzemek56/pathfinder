@@ -126,7 +126,6 @@ function HomePage() {
                     {isRunning &&
                       <AlgorithmPseudocode
                           algorithm={selectedAlgorithm}
-                          currentNodes={currentNodes}
                           pseudocode={pseudocode}
                       />
                     }
