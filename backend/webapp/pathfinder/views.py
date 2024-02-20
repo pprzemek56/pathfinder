@@ -37,3 +37,27 @@ def visualize(request: Request):
         return Response(data=path_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return response
+
+
+@api_view(["POST"])
+def visualize_with_debug(request: Request):
+    board_serializer = BoardSerializer(data=request.data)
+
+    if board_serializer.is_valid():
+        board = board_serializer.save()
+    else:
+        return Response(data=board_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if board.algorithm == "dfs":
+        algorithms.dfs_algorithm(board, debug=True)
+    elif board.algorithm == "bfs":
+        algorithms.bfs_algorithm(board, debug=True)
+    elif board.algorithm == "dijkstras":
+        algorithms.djikstras_algorithm(board, debug=True)
+    elif board.algorithm == "a_star":
+        algorithms.a_star_algorithm(board, debug=True)
+    elif board.algorithm == "greedy_bfs":
+        algorithms.greedy_best_first_search(board, debug=True)
+
+    return Response({"message": "Debug visualization in progress"}, status=status.HTTP_200_OK)
+
