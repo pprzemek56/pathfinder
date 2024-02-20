@@ -24,10 +24,10 @@ def trace_back_path(end_node, parents, start_node):
     return shortest_path
 
 
-def greedy_best_first_search(board: Board):
+def greedy_best_first_search(board: Board, debug=False):
     start, end = board.find_start_end()
     heuristic = lambda node: manhattan_distance(node, end)
-    emit_event("Algorithm Initialization", "Starting Greedy Best-First Search. Initializing variables.")
+    emit_event("Algorithm Initialization", "Starting Greedy Best-First Search. Initializing variables.", debug)
 
     visited = []
     path_found = False
@@ -41,11 +41,11 @@ def greedy_best_first_search(board: Board):
 
         if current_node not in visited:
             visited.append(current_node)
-            emit_event("Node Visitation", f"Visiting node at {current_node['x']}, {current_node['y']}.")
+            emit_event("Node Visitation", f"Visiting node at {current_node['x']}, {current_node['y']}.", debug)
 
         if current_node == end:
             path_found = True
-            emit_event("Path Discovery", "End node reached. Tracing back the shortest path.")
+            emit_event("Path Discovery", "End node reached. Tracing back the shortest path.", debug)
             break
 
         for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
@@ -57,22 +57,22 @@ def greedy_best_first_search(board: Board):
                         heapq.heappush(priority_queue,
                                        (heuristic({'x': nx, 'y': ny}), next(sequence_number), {'x': nx, 'y': ny}))
                         parents[(nx, ny)] = current_node
-                        emit_event("Neighbor Evaluation", f"Evaluating neighbor at {nx}, {ny}.")
+                        emit_event("Neighbor Evaluation", f"Evaluating neighbor at {nx}, {ny}.", debug)
 
     if not path_found:
-        emit_event("Algorithm Completion", "Algorithm completed. Path not found.")
+        emit_event("Algorithm Completion", "Algorithm completed. Path not found.", debug)
         return None, None
     
     shortest_path = trace_back_path(current_node, parents, start)
-    emit_event("Algorithm Completion", "Algorithm completed. Path found.")
+    emit_event("Algorithm Completion", "Algorithm completed. Path found.", debug)
 
     return visited, shortest_path
 
 
-def a_star_algorithm(board: Board):
+def a_star_algorithm(board: Board, debug=False):
     start, end = board.find_start_end()
     heuristic = lambda node: manhattan_distance(node, end)
-    emit_event("Algorithm Initialization", "Starting A* Algorithm. Initializing variables.")
+    emit_event("Algorithm Initialization", "Starting A* Algorithm. Initializing variables.", debug)
 
     distances = {(i, j): float('infinity') for i in range(len(board.board)) for j in range(len(board.board[0]))}
     distances[(start['y'], start['x'])] = 0
@@ -89,11 +89,11 @@ def a_star_algorithm(board: Board):
 
         if current_node not in visited:
             visited.append(current_node)
-            emit_event("Node Visitation", f"Visiting node at {current_node['x']}, {current_node['y']}.")
+            emit_event("Node Visitation", f"Visiting node at {current_node['x']}, {current_node['y']}.", debug)
 
         if current_node == end:
             path_found = True
-            emit_event("Path Discovery", "End node reached. Tracing back the shortest path.")
+            emit_event("Path Discovery", "End node reached. Tracing back the shortest path.", debug)
             break
 
         for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
@@ -108,21 +108,21 @@ def a_star_algorithm(board: Board):
                         heapq.heappush(priority_queue,
                                        (total_cost, next(sequence_number), new_cost, {'x': nx, 'y': ny}))
                         parents[(nx, ny)] = current_node
-                        emit_event("Neighbor Evaluation", f"Evaluating neighbor at {nx}, {ny}.")
+                        emit_event("Neighbor Evaluation", f"Evaluating neighbor at {nx}, {ny}.", debug)
 
     if not path_found:
-        emit_event("Algorithm Completion", "Algorithm completed. Path not found.")
+        emit_event("Algorithm Completion", "Algorithm completed. Path not found.", debug)
         return None, None
 
     shortest_path = trace_back_path(current_node, parents, start)
-    emit_event("Algorithm Completion", "Algorithm completed. Path found.")
+    emit_event("Algorithm Completion", "Algorithm completed. Path found.", debug)
 
     return visited, shortest_path
 
 
-def djikstras_algorithm(board: Board):
+def djikstras_algorithm(board: Board, debug=False):
     start, end = board.find_start_end()
-    emit_event("Algorithm Initialization", "Starting Dijkstras Algorithm. Initializing variables.")
+    emit_event("Algorithm Initialization", "Starting Dijkstras Algorithm. Initializing variables.", debug)
 
     distances = {(i, j): float('infinity') for i in range(len(board.board)) for j in range(len(board.board[0]))}
     distances[(start['y'], start['x'])] = 0
@@ -139,11 +139,11 @@ def djikstras_algorithm(board: Board):
 
         if current_node not in visited:
             visited.append(current_node)
-            emit_event("Node Visitation", f"Visiting node at {current_node['x']}, {current_node['y']}.")
+            emit_event("Node Visitation", f"Visiting node at {current_node['x']}, {current_node['y']}.", debug)
 
         if current_node == end:
             path_found = True
-            emit_event("Path Discovery", "End node reached. Tracing back the shortest path.")
+            emit_event("Path Discovery", "End node reached. Tracing back the shortest path.", debug)
             break
 
         for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
@@ -156,21 +156,21 @@ def djikstras_algorithm(board: Board):
                         distances[(ny, nx)] = new_distance
                         heapq.heappush(priority_queue, (new_distance, (ny, nx)))
                         parents[(nx, ny)] = current_node
-                        emit_event("Neighbor Evaluation", f"Evaluating neighbor at {nx}, {ny}.")
+                        emit_event("Neighbor Evaluation", f"Evaluating neighbor at {nx}, {ny}.", debug)
 
     if not path_found:
-        emit_event("Algorithm Completion", "Algorithm completed. Path not found.")
+        emit_event("Algorithm Completion", "Algorithm completed. Path not found.", debug)
         return None, None
 
     shortest_path = trace_back_path(current_node, parents, start)
-    emit_event("Algorithm Completion", "Algorithm completed. Path found.")
+    emit_event("Algorithm Completion", "Algorithm completed. Path found.", debug)
 
     return visited, shortest_path
 
 
-def dfs_algorithm(board: Board):
+def dfs_algorithm(board: Board, debug=False):
     start, end = board.find_start_end()
-    emit_event("Algorithm Initialization", "Starting Depth-First Search. Initializing variables.")
+    emit_event("Algorithm Initialization", "Starting Depth-First Search. Initializing variables.", debug)
     visited = []
     visited_set = set()
     stack = [(start, None)]
@@ -181,12 +181,12 @@ def dfs_algorithm(board: Board):
         if (node["x"], node["y"]) not in visited_set:
             visited.append(node)
             visited_set.add((node["x"], node["y"]))
-            emit_event("Node Visitation", f"Visiting node at {node['x']}, {node['y']}.")
+            emit_event("Node Visitation", f"Visiting node at {node['x']}, {node['y']}.", debug)
 
             if node == end:
-                emit_event("Path Discovery", "End node reached. Tracing back the shortest path.")
+                emit_event("Path Discovery", "End node reached. Tracing back the shortest path.", debug)
                 shortest_path = trace_back_path(end, parents, start)
-                emit_event("Algorithm Completion", "Algorithm completed. Path found.")
+                emit_event("Algorithm Completion", "Algorithm completed. Path found.", debug)
                 return visited, shortest_path
 
             for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
@@ -195,13 +195,13 @@ def dfs_algorithm(board: Board):
                     stack.append(({"x": nx, "y": ny}, node))
                     parents[(nx, ny)] = node
 
-    emit_event("Algorithm Completion", "Algorithm completed. Path not found.")
+    emit_event("Algorithm Completion", "Algorithm completed. Path not found.", debug)
     return None, None
 
 
-def bfs_algorithm(board: Board):
+def bfs_algorithm(board: Board, debug=False):
     start, end = board.find_start_end()
-    emit_event("Algorithm Initialization", "Starting Breadth-First Search. Initializing variables.")
+    emit_event("Algorithm Initialization", "Starting Breadth-First Search. Initializing variables.", debug)
     visited = []
     visited_set = set()
     queue = deque([(start, None)])
@@ -212,12 +212,12 @@ def bfs_algorithm(board: Board):
         if (node["x"], node["y"]) not in visited_set:
             visited.append(node)
             visited_set.add((node["x"], node["y"]))
-            emit_event("Node Visitation", f"Visiting node at {node['x']}, {node['y']}.")
+            emit_event("Node Visitation", f"Visiting node at {node['x']}, {node['y']}.", debug)
 
             if node == end:
-                emit_event("Path Discovery", "End node reached. Tracing back the shortest path.")
+                emit_event("Path Discovery", "End node reached. Tracing back the shortest path.", debug)
                 shortest_path = trace_back_path(end, parents, start)
-                emit_event("Algorithm Completion", "Algorithm completed. Path found.")
+                emit_event("Algorithm Completion", "Algorithm completed. Path found.", debug)
                 return visited, shortest_path
 
             for dy, dx in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
@@ -226,5 +226,5 @@ def bfs_algorithm(board: Board):
                     queue.append(({"x": nx, "y": ny}, node))
                     parents[(nx, ny)] = node
 
-    emit_event("Algorithm Completion", "Algorithm completed. Path not found.")
+    emit_event("Algorithm Completion", "Algorithm completed. Path not found.", debug)
     return None, None
