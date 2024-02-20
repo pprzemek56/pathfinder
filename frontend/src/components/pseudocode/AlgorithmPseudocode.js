@@ -1,6 +1,6 @@
 import React from 'react';
 import './AlgorithmPseudocode.css';
-function AlgorithmPseudocode({ pseudocode }) {
+function AlgorithmPseudocode({ algorithm }) {
     const pseudoCode = {
         "dfs": `Depth-First Search (DFS):
 1. Initialize the start and end points.
@@ -61,7 +61,12 @@ function AlgorithmPseudocode({ pseudocode }) {
 
     return (
         <div className="algorithm-pseudocode">
-          <pre>{pseudocode}</pre>
+            {algorithm &&
+                <>
+                    <h3>{`Pseudo-Code for ${algorithm.label}`}</h3>
+                    <pre>{pseudoCode[algorithm.id]}</pre>
+                </>
+            }
         </div>
     );
 }
