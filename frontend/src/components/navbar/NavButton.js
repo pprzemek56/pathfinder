@@ -21,22 +21,20 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
     const handleDebugMessage = (data) => {
         const messageData = JSON.parse(data.message);
 
-        // console.log(messageData)
-
         switch(messageData.event) {
-            case 'Algorithm Initialization':
+            case 'algorithm_initialization':
                 console.log(messageData.detail);
                 break;
-            case 'Node Visitation':
+            case 'node_visitation':
                 console.log(messageData.detail);
                 break;
-            case 'Path Discovery':
+            case 'path_discovery':
                 console.log(messageData.detail);
                 break;
-            case 'Neighbor Evaluation':
+            case 'neighbor_evaluation':
                 console.log(messageData.detail);
                 break;
-            case 'Algorithm Completion':
+            case 'algorithm_completion':
                 console.log(messageData.detail);
                 break;
             default:
