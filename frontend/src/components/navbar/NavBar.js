@@ -19,6 +19,7 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, setBoard, canvas
         {id: '10', label: 'Fast'},
         {id: '50', label: 'Medium'},
         {id: '250', label: 'Slow'},
+        {id: 'debug', label: 'Debug'}
     ]
 
     const algorithmItems = [
