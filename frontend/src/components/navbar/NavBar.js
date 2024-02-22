@@ -5,21 +5,14 @@ import Dropdown from "./Dropdown";
 import NavButton from "./NavButton";
 import NavLink from "./NavLink";
 import {generateMazePattern, generateRandomPattern} from "../../utils/example_patterns";
+import {speedItems} from "../../pages/HomePage";
 
 
-function NavBar({ onClearBoard, isRunning, setIsRunning, board, setBoard, canvasRef, start, end, setMessage, setShowPopup, squareSize, selectedAlgorithm, setSelectedAlgorithm, selectedPattern, setSelectedPattern }) {
-    const [selectedSpeed, setSelectedSpeed] = useState({ id: '50', label: 'Medium' });
+function NavBar({ onClearBoard, isRunning, setIsRunning, board, setBoard, canvasRef, start, end, setMessage, setShowPopup, squareSize, selectedAlgorithm, setSelectedAlgorithm, selectedPattern, setSelectedPattern, selectedSpeed, setSelectedSpeed }) {
 
     const patternItems = [
         {id: 'random', label: 'Random Pattern'},
         {id: 'maze', label: 'Maze Pattern'},
-    ]
-
-    const speedItems = [
-        {id: '10', label: 'Fast'},
-        {id: '50', label: 'Medium'},
-        {id: '250', label: 'Slow'},
-        {id: 'debug', label: 'Debug'}
     ]
 
     const algorithmItems = [

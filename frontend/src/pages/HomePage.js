@@ -10,7 +10,12 @@ import AlgorithmPseudocode from "../components/pseudocode/AlgorithmPseudocode";
 
 export const HORIZONTAL_SQUARES = 53;
 export const VERTICAL_SQUARES = 21;
-
+export const speedItems = [
+    {id: '10', label: 'Fast'},
+    {id: '50', label: 'Medium'},
+    {id: '250', label: 'Slow'},
+    {id: 'debug', label: 'Debug'}
+]
 function HomePage() {
     const [start, setStart] = useState({ x: 10, y: 10 });
     const [end, setEnd] = useState({ x: 41, y: 10 });
@@ -22,7 +27,7 @@ function HomePage() {
     const dynamicSquareSize = UseDynamicSquareSize();
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
     const [selectedPattern, setSelectedPattern] = useState(null);
-
+    const [selectedSpeed, setSelectedSpeed] = useState({ id: '50', label: 'Medium' });
     const handleClosePopup = () => {
         setShowPopup(false);
     };
@@ -76,6 +81,8 @@ function HomePage() {
                 setSelectedAlgorithm={setSelectedAlgorithm}
                 selectedPattern={selectedPattern}
                 setSelectedPattern={setSelectedPattern}
+                selectedSpeed={selectedSpeed}
+                setSelectedSpeed={setSelectedSpeed}
             />
             <div className="homePage-content">
                 <div className="homePage-conatainer">
@@ -91,7 +98,10 @@ function HomePage() {
                         squareSize={dynamicSquareSize}
                     />
                     {isRunning &&
-                      <AlgorithmPseudocode algorithm={selectedAlgorithm} />
+                      <AlgorithmPseudocode
+                          algorithm={selectedAlgorithm}
+                          selectedSpeed={selectedSpeed}
+                      />
                     }
                 </div>
             </div>

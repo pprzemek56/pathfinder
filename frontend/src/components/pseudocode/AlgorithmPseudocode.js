@@ -1,6 +1,6 @@
 import React from 'react';
 import './AlgorithmPseudocode.css';
-function AlgorithmPseudocode({ algorithm }) {
+function AlgorithmPseudocode({ algorithm, selectedSpeed }) {
     const pseudoCode = {
         "dfs": `Depth-First Search (DFS):
 1. Initialize the start and end points.
@@ -58,6 +58,10 @@ function AlgorithmPseudocode({ algorithm }) {
       i. If the neighbor is not visited and not a wall, add it to the priority queue.
 5. If no path is found, return None.`
     };
+
+    if (selectedSpeed.id !== "debug") {
+        return null;
+    }
 
     return (
         <div className="algorithm-pseudocode">
