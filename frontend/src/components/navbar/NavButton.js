@@ -1,16 +1,16 @@
 import {visualize, visualize_with_debug} from "../../utils/api";
-import {animateShortestPath, animateSingleNode, animateVisited, highlightNeighborEvaluation} from "../board/animations";
+import {animateShortestPath, animateVisited} from "../board/animations";
 import "./NavButton.css"
 import {clearPath} from "../board/Board";
 import {useEffect} from "react";
-function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end, speed, setMessage, setShowPopup, squareSize, setCurrentMessage }) {
+function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end, speed, setMessage, setShowPopup, squareSize }) {
 
     useEffect(() => {
         const websocket = new WebSocket('ws://localhost:8000/ws/visualize/');
 
         websocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            handleDebugMessage(data).then();
+            handleDebugMessage(data);
         };
 
         return () => {
@@ -18,57 +18,28 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
         };
     }, []);
 
-    const handleDebugMessage = async (data) => {
-        const ctx = canvasRef.current.getContext('2d');
+    const handleDebugMessage = (data) => {
         const messageData = JSON.parse(data.message);
 
-        switch (messageData.event) {
+        switch(messageData.event) {
             case 'algorithm_initialization':
                 console.log(messageData.detail);
-                setCurrentMessage(messageData.detail);
-                await delay(5000);
                 break;
             case 'node_visitation':
                 console.log(messageData.detail);
-                const visitationCoordinates = extractCoordinates(messageData.detail);
-                animateSingleNode({
-                    x: visitationCoordinates.x,
-                    y: visitationCoordinates.y
-                }, ctx, squareSize, start, end);
-                setCurrentMessage(messageData.detail);
-                await delay(10000);
                 break;
             case 'path_discovery':
                 console.log(messageData.detail);
-                setCurrentMessage(messageData.detail);
-                await delay(10000);
                 break;
             case 'neighbor_evaluation':
                 console.log(messageData.detail);
-                const evaluationCoordinates = extractCoordinates(messageData.detail);
-                highlightNeighborEvaluation({
-                    x: evaluationCoordinates.x,
-                    y: evaluationCoordinates.y
-                }, ctx, squareSize, start, end);
-                setCurrentMessage(messageData.detail);
-                await delay(10000);
                 break;
             case 'algorithm_completion':
                 console.log(messageData.detail);
-                setCurrentMessage(messageData.detail);
-                await delay(10000);
                 break;
             default:
                 break;
         }
-    };
-
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-    const extractCoordinates = (detail) => {
-        const regex = /at (\d+), (\d+)/;
-        const match = detail.match(regex);
-        return match ? { x: parseInt(match[1], 10), y: parseInt(match[2], 10) } : null;
     };
     const onButtonClick = async () => {
         const ctx = canvasRef.current.getContext('2d');
@@ -87,7 +58,7 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
 
         if (!isRunning) {
             try {
-                if (speed === "0") {
+                if (speed.id === "debug") {
                     visualize_with_debug(data).then();
                 } else {
                     const result = await visualize(data);

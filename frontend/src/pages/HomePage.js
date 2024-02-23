@@ -14,7 +14,7 @@ export const speedItems = [
     {id: '10', label: 'Fast'},
     {id: '50', label: 'Medium'},
     {id: '250', label: 'Slow'},
-    {id: '0', label: 'Debug'}
+    {id: 'debug', label: 'Debug'}
 ]
 function HomePage() {
     const [start, setStart] = useState({ x: 10, y: 10 });
@@ -28,8 +28,6 @@ function HomePage() {
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
     const [selectedPattern, setSelectedPattern] = useState(null);
     const [selectedSpeed, setSelectedSpeed] = useState({ id: '50', label: 'Medium' });
-    const [currentMessage, setCurrentMessage] = useState(null);
-
     const handleClosePopup = () => {
         setShowPopup(false);
     };
@@ -85,7 +83,6 @@ function HomePage() {
                 setSelectedPattern={setSelectedPattern}
                 selectedSpeed={selectedSpeed}
                 setSelectedSpeed={setSelectedSpeed}
-                setCurrentMessage={setCurrentMessage}
             />
             <div className="homePage-content">
                 <div className="homePage-conatainer">
@@ -102,8 +99,8 @@ function HomePage() {
                     />
                     {isRunning &&
                       <AlgorithmPseudocode
+                          algorithm={selectedAlgorithm}
                           selectedSpeed={selectedSpeed}
-                          currentMessage={currentMessage}
                       />
                     }
                 </div>
