@@ -100,7 +100,7 @@ def a_star_algorithm(board: Board, debug=False):
             nx, ny = cx + dx, cy + dy
             if 0 <= ny < len(board.board) and 0 <= nx < len(board.board[0]):
                 neighbor_node = board.board[ny][nx]
-                if neighbor_node['type'] != 1:  # Skip walls
+                if neighbor_node['type'] != 1:
                     new_cost = current_cost + neighbor_node['weight']
                     if new_cost < distances[(ny, nx)]:
                         distances[(ny, nx)] = new_cost
