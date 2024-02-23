@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import './NavBar.css';
 import Dropdown from "./Dropdown";
@@ -8,7 +8,7 @@ import {generateMazePattern, generateRandomPattern} from "../../utils/example_pa
 import {speedItems} from "../../pages/HomePage";
 
 
-function NavBar({ onClearBoard, isRunning, setIsRunning, board, setBoard, canvasRef, start, end, setMessage, setShowPopup, squareSize, selectedAlgorithm, setSelectedAlgorithm, selectedPattern, setSelectedPattern, selectedSpeed, setSelectedSpeed }) {
+function NavBar({ onClearBoard, isRunning, setIsRunning, board, setBoard, canvasRef, start, end, setMessage, setShowPopup, squareSize, selectedAlgorithm, setSelectedAlgorithm, selectedPattern, setSelectedPattern, selectedSpeed, setSelectedSpeed, setCurrentMessage }) {
 
     const patternItems = [
         {id: 'random', label: 'Random Pattern'},
@@ -74,6 +74,7 @@ function NavBar({ onClearBoard, isRunning, setIsRunning, board, setBoard, canvas
                             setMessage={setMessage}
                             setShowPopup={setShowPopup}
                             squareSize={squareSize}
+                            setCurrentMessage={setCurrentMessage}
                         />
                         <NavLink id="clear-board" label="Clear Board" onClick={onClearBoard} isRunning={isRunning}/>
                         <Dropdown
