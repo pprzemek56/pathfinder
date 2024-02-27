@@ -2,7 +2,7 @@ import React from 'react';
 import './AlgorithmPseudocode.css';
 function AlgorithmPseudocode({ currentMessage, selectedSpeed }) {
 
-    if (selectedSpeed.id !== "debug") {
+    if (selectedSpeed.id !== "0") {
         return null;
     }
 
