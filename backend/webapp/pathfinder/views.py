@@ -49,15 +49,15 @@ def visualize_with_debug(request: Request):
         return Response(data=board_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if board.algorithm == "dfs":
-        algorithms.dfs_algorithm(board, debug=True)
+        algorithms.dfs_algorithm(board, True)
     elif board.algorithm == "bfs":
-        algorithms.bfs_algorithm(board, debug=True)
+        algorithms.bfs_algorithm(board, True)
     elif board.algorithm == "dijkstras":
-        algorithms.djikstras_algorithm(board, debug=True)
+        algorithms.djikstras_algorithm(board, True)
     elif board.algorithm == "a_star":
-        algorithms.a_star_algorithm(board, debug=True)
+        algorithms.a_star_algorithm(board, True)
     elif board.algorithm == "greedy_bfs":
-        algorithms.greedy_best_first_search(board, debug=True)
+        algorithms.greedy_best_first_search(board, True)
 
     return Response({"message": "Debug visualization in progress"}, status=status.HTTP_200_OK)
 
