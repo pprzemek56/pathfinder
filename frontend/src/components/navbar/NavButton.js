@@ -1,45 +1,52 @@
 import {visualize, visualize_with_debug} from "../../utils/api";
-import {animateShortestPath, animateVisited} from "../board/animations";
+import {animateShortestPath, animateSingleNode, animateVisited, highlightNeighborEvaluation} from "../board/animations";
 import "./NavButton.css"
 import {clearPath} from "../board/Board";
 import {useEffect} from "react";
-function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end, speed, setMessage, setShowPopup, squareSize }) {
+function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, start, end, speed, setMessage, setShowPopup, squareSize, setCurrentMessage }) {
 
     useEffect(() => {
         const websocket = new WebSocket('ws://localhost:8000/ws/visualize/');
 
         websocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            handleDebugMessage(data);
+            handleDebugMessage(data).then();
         };
 
         return () => {
             websocket.close();
         };
     }, []);
-
-    const handleDebugMessage = (data) => {
+    const handleDebugMessage = async (data) => {
+        const ctx = canvasRef.current.getContext('2d');
         const messageData = JSON.parse(data.message);
 
-        switch(messageData.event) {
+        setCurrentMessage(messageData.detail);
+
+        switch (messageData.event) {
             case 'algorithm_initialization':
-                console.log(messageData.detail);
                 break;
             case 'node_visitation':
-                console.log(messageData.detail);
+                const visitCoords = extractCoordinates(messageData.detail);
+                animateSingleNode({ x: visitCoords.x, y: visitCoords.y }, ctx, squareSize, start, end);
                 break;
             case 'path_discovery':
-                console.log(messageData.detail);
                 break;
             case 'neighbor_evaluation':
-                console.log(messageData.detail);
+                const evalCoords = extractCoordinates(messageData.detail);
+                highlightNeighborEvaluation({ x: evalCoords.x, y: evalCoords.y }, ctx, squareSize);
                 break;
             case 'algorithm_completion':
-                console.log(messageData.detail);
                 break;
             default:
                 break;
         }
+    };
+
+    const extractCoordinates = (detail) => {
+        const regex = /at (\d+), (\d+)/;
+        const match = detail.match(regex);
+        return match ? { x: parseInt(match[1], 10), y: parseInt(match[2], 10) } : null;
     };
     const onButtonClick = async () => {
         const ctx = canvasRef.current.getContext('2d');
@@ -58,8 +65,9 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
 
         if (!isRunning) {
             try {
-                if (speed.id === "debug") {
-                    visualize_with_debug(data).then();
+                if (speed === "0") {
+                    setIsRunning(true);
+                    visualize_with_debug(data).then(() => {setIsRunning(false);});
                 } else {
                     const result = await visualize(data);
                     const { visited, shortest_path } = result;
