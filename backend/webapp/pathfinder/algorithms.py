@@ -111,7 +111,7 @@ def a_star_algorithm(board: Board, debug=False):
                         emit_event("neighbor_evaluation", f"Evaluating neighbor at {nx}, {ny}.", debug)
 
     if not path_found:
-        emit_event("algorithm_completion", "Algorithm completed. Path not found.", debug)
+        emit_event("algorithm_failed", "Algorithm completed. Path not found.", debug)
         return None, None
 
     shortest_path = trace_back_path(current_node, parents, start)
