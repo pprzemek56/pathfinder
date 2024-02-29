@@ -57,16 +57,18 @@ export const highlightNeighborEvaluation = (node, ctx, squareSize, start, end) =
     const originalColor = "#ffffff";
     const evaluationColor = "#f0e68c";
 
-    if (node.x === end.x && node.y === end.y) {
-        drawRectangle(ctx, node.x, node.y, squareSize, evaluationColor);
+    drawRectangle(ctx, node.x, node.y, squareSize, evaluationColor);
+    if (node.x === start.x && node.y === start.y) {
+        drawStart(ctx, node.x, node.y, squareSize);
+    } else if (node.x === end.x && node.y === end.y) {
         drawEnd(ctx, node.x, node.y, squareSize);
-    } else {
-        drawRectangle(ctx, node.x, node.y, squareSize, evaluationColor);
-        setTimeout(() => {
-            drawRectangle(ctx, node.x, node.y, squareSize, originalColor);
-            if (node.x === start.x && node.y === start.y) {
-                drawStart(ctx, node.x, node.y, squareSize);
-            }
-        }, 1000);
     }
+    setTimeout(() => {
+        drawRectangle(ctx, node.x, node.y, squareSize, originalColor);
+        if (node.x === start.x && node.y === start.y) {
+            drawStart(ctx, node.x, node.y, squareSize);
+        } else if (node.x === end.x && node.y === end.y) {
+            drawEnd(ctx, node.x, node.y, squareSize);
+        }
+    }, 1000);
 };
