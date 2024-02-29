@@ -54,6 +54,9 @@ export function clearPath(ctx, board, squareSize) {
             if (board[y][x].type === 3) {
                 drawRectangle(ctx, x, y, squareSize, "#ffffff", squareSize / 12);
                 drawEnd(ctx, x, y, squareSize);
+            } else if (board[y][x].type === 2) {
+                drawRectangle(ctx, x, y, squareSize, "#ffffff", squareSize / 12);
+                drawStart(ctx, x, y, squareSize);
             }
         }
     }
