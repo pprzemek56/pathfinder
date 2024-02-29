@@ -89,6 +89,12 @@ function HomePage() {
             />
             <div className="homePage-content">
                 <div className="homePage-conatainer">
+                    {isRunning &&
+                      <AlgorithmPseudocode
+                          selectedSpeed={selectedSpeed}
+                          currentMessage={currentMessage}
+                      />
+                    }
                     <Board
                         canvasRef={canvasRef}
                         board={board}
@@ -100,12 +106,6 @@ function HomePage() {
                         isRunning={isRunning}
                         squareSize={dynamicSquareSize}
                     />
-                    {isRunning &&
-                      <AlgorithmPseudocode
-                          selectedSpeed={selectedSpeed}
-                          currentMessage={currentMessage}
-                      />
-                    }
                 </div>
             </div>
             <Footer />

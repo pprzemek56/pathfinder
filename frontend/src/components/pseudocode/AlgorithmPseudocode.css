@@ -2,7 +2,8 @@
     width: 100%;
     max-width: 600px;
     margin-top: 20px;
-    padding: 15px;
+    padding-top: 0px;
+    padding-left: 5px;
     border-radius: 5px;
     overflow-y: visible !important;
     max-height: 400px;
@@ -10,4 +11,5 @@
 
 .algorithm-pseudocode pre {
     overflow: visible !important;
+    font-weight: bold;
 }
