@@ -16,7 +16,8 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
         return () => {
             websocket.close();
         };
-    }, []);
+    }, [start, end]);
+
     const handleDebugMessage = async (data) => {
         const ctx = canvasRef.current.getContext('2d');
         const messageData = JSON.parse(data.message);
@@ -24,19 +25,13 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
         setCurrentMessage(messageData.detail);
 
         switch (messageData.event) {
-            case 'algorithm_initialization':
-                break;
             case 'node_visitation':
                 const visitCoords = extractCoordinates(messageData.detail);
                 animateSingleNode({ x: visitCoords.x, y: visitCoords.y }, ctx, squareSize, start, end);
                 break;
-            case 'path_discovery':
-                break;
             case 'neighbor_evaluation':
                 const evalCoords = extractCoordinates(messageData.detail);
-                highlightNeighborEvaluation({ x: evalCoords.x, y: evalCoords.y }, ctx, squareSize);
-                break;
-            case 'algorithm_completion':
+                highlightNeighborEvaluation({ x: evalCoords.x, y: evalCoords.y }, ctx, squareSize, start, end);
                 break;
             default:
                 break;
@@ -66,8 +61,12 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
         if (!isRunning) {
             try {
                 if (speed === "0") {
+                    clearPath(ctx, board, squareSize);
                     setIsRunning(true);
-                    visualize_with_debug(data).then(() => {setIsRunning(false);});
+                    const result = await visualize_with_debug(data);
+                    const { visited, shortest_path } = result;
+                    animateShortestPath(shortest_path, ctx, start, end, 50, squareSize, squareSize / 12);
+                    setIsRunning(false);
                 } else {
                     const result = await visualize(data);
                     const { visited, shortest_path } = result;
@@ -90,6 +89,7 @@ function NavButton({ id, isRunning, setIsRunning, board, algorithm, canvasRef, s
             } catch (error) {
                 setMessage("The shortest path doesn't exist.");
                 setShowPopup(true);
+                setIsRunning(false);
             }
         }
     };
